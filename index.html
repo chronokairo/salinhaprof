@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel do Professor - SalinhaPro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+    <!-- Sidebar -->
+    <div class="flex min-h-screen">
+        <aside class="w-64 bg-indigo-700 text-white p-6">
+            <h1 class="text-2xl font-bold mb-8">SalinhaPro</h1>
+            <nav class="space-y-4">
+                <a href="#" class="block hover:text-indigo-200">📚 Minhas Salinhas</a>
+                <a href="#" class="block hover:text-indigo-200">➕ Nova Salinha</a>
+                <a href="#" class="block hover:text-indigo-200">⚙️ Configurações</a>
+            </nav>
+            <div class="mt-10 border-t border-indigo-500 pt-4">
+                <a href="#" class="block text-sm hover:text-indigo-300">Sair</a>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="flex-1 p-8">
+            <!-- Back button -->
+            <a href="homepage.html"
+                class="inline-flex items-center mb-6 text-indigo-600 hover:text-indigo-800 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Voltar para Home
+            </a>
+
+            <!-- Materiais enviados pelo professor -->
+            <section class="mt-12">
+                <h2 class="text-2xl font-bold mb-4">📂 Materiais de Aula</h2>
+
+                <!-- Botão simulado para envio de material -->
+                <div class="mb-4">
+                    <a href="#" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">+
+                        Adicionar
+                        Material</a>
+                </div>
+
+                <!-- Lista de materiais -->
+                <ul class="space-y-3">
+                    <li class="bg-white p-4 rounded shadow flex items-center justify-between">
+                        <div>
+                            <p class="font-medium">📄 Apostila Frações - Capítulo 2</p>
+                            <p class="text-sm text-gray-500">Enviado em: 20/05/2025</p>
+                        </div>
+                        <a href="#" class="text-indigo-600 hover:underline text-sm">Ver</a>
+                    </li>
+                    <li class="bg-white p-4 rounded shadow flex items-center justify-between">
+                        <div>
+                            <p class="font-medium">📎 Lista de Exercícios ENEM</p>
+                            <p class="text-sm text-gray-500">Enviado em: 19/05/2025</p>
+                        </div>
+                        <a href="#" class="text-indigo-600 hover:underline text-sm">Ver</a>
+                    </li>
+                </ul>
+            </section>
+
+
+            <h2 class="text-3xl font-bold mb-6">Minhas Salinhas</h2>
+
+
+            <!-- Botão de nova salinha -->
+            <div class="mb-6">
+                <a href="#" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">+ Criar
+                    nova salinha</a>
+            </div>
+
+            <!-- Lista de salinhas -->
+            <!-- Lista de salinhas -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-4 rounded shadow">
+                    <h3 class="text-xl font-semibold mb-2">ver como o aluno</h3>
+                    <p class="text-sm text-gray-600 mb-3">Vídeo aula de frações + materiais</p>
+                    <div class="flex gap-2">
+                        <a href="salinhadoaluno.html"
+                            class="bg-indigo-600 text-white px-3 py-1 rounded text-sm hover:bg-indigo-700"> Ver como
+                            aluno</a>
+                        <a href="#" class="text-indigo-600 hover:underline text-sm">Editar</a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded shadow">
+                    <h3 class="text-xl font-semibold mb-2">Redação - ENEM</h3>
+                    <p class="text-sm text-gray-600 mb-3">Aula sobre estrutura de texto dissertativo</p>
+                    <div class="flex gap-2">
+                        <a href="salinha-aluno.html"
+                            class="bg-indigo-600 text-white px-3 py-1 rounded text-sm hover:bg-indigo-700"> Ver como
+                            aluno</a>
+                        <a href="#" class="text-indigo-600 hover:underline text-sm">Editar</a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded shadow">
+                    <h3 class="text-xl font-semibold mb-2">Física - Cinemática</h3>
+                    <p class="text-sm text-gray-600 mb-3">Vídeo + exercícios com gabarito</p>
+                    <div class="flex gap-2">
+                        <a href="salinha-aluno.html"
+                            class="bg-indigo-600 text-white px-3 py-1 rounded text-sm hover:bg-indigo-700">👁 Ver como
+                            aluno</a>
+                        <a href="#" class="text-indigo-600 hover:underline text-sm">Editar</a>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</body>
+
+</html>
