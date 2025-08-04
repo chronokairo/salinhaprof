@@ -4,460 +4,539 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SalinhaPro - Crie sua salinha digital para professores</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>CursoHub - Plataforma Profissional de Cursos Online</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <meta name="description" content="Crie sua própria salinha digital para organizar suas aulas, compartilhar vídeos e materiais didáticos de forma simples e profissional.">
-    <!-- Favicon -->
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <style>
-        .testimonial-card {
-            transition: transform 0.3s ease;
-        }
-        .testimonial-card:hover {
-            transform: translateY(-5px);
-        }
-        .feature-card {
-            transition: all 0.3s ease;
-        }
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-    </style>
+    <meta name="description" content="Plataforma profissional para criação e gestão de cursos online. Organize conteúdos, acompanhe progresso e crie experiências de aprendizado excepcionais.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
 </head>
 
-<body class="bg-gray-50 text-gray-800">
-
-    <!-- Navbar -->
-    <header class="bg-white shadow sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="flex items-center space-x-2">
-                <img src="https://via.placeholder.com/40" alt="Logo SalinhaPro" class="h-8 w-auto">
-                <h1 class="text-2xl font-bold text-indigo-600">SalinhaPro</h1>
-            </a>
-            <nav class="hidden md:flex space-x-6">
-                <a href="#beneficios" class="text-sm text-gray-700 hover:text-indigo-600 transition">Benefícios</a>
-                <a href="#funciona" class="text-sm text-gray-700 hover:text-indigo-600 transition">Como funciona</a>
-                <a href="#depoimentos" class="text-sm text-gray-700 hover:text-indigo-600 transition">Depoimentos</a>
-                <a href="#precos" class="text-sm text-gray-700 hover:text-indigo-600 transition">Planos</a>
-                <a href="telas/index.html"
-                    class="text-sm text-white bg-indigo-600 px-4 py-2 rounded hover:bg-indigo-700 transition">Entrar</a>
-            </nav>
-            <button class="md:hidden text-gray-700">
-                <i class="fas fa-bars text-xl"></i>
-            </button>
-        </div>
-        <!-- Menu mobile -->
-        <div class="hidden px-6 py-4 bg-white md:hidden">
-            <a href="#beneficios" class="block py-2 text-gray-700 hover:text-indigo-600">Benefícios</a>
-            <a href="#funciona" class="block py-2 text-gray-700 hover:text-indigo-600">Como funciona</a>
-            <a href="#depoimentos" class="block py-2 text-gray-700 hover:text-indigo-600">Depoimentos</a>
-            <a href="#precos" class="block py-2 text-gray-700 hover:text-indigo-600">Planos</a>
-            <a href="telas/index.html" class="block py-2 mt-2 text-center text-white bg-indigo-600 px-4 py-2 rounded">Entrar</a>
-        </div>
-    </header>
-
-    <!-- Hero -->
-    <section class="bg-gradient-to-br from-indigo-600 to-indigo-800 text-white py-20 text-center">
-        <div class="max-w-3xl mx-auto px-6">
-            <span class="inline-block bg-indigo-800 text-indigo-200 text-xs px-3 py-1 rounded-full mb-4">Novidade: Agora com salas para atividades em grupo!</span>
-            <h2 class="text-4xl md:text-5xl font-bold mb-4">Crie sua própria salinha digital</h2>
-            <p class="text-lg mb-8 text-indigo-100">Organize suas aulas, compartilhe vídeos, envie materiais e gerencie tudo em um só
-                lugar de forma simples e profissional.</p>
-            <div class="flex flex-col md:flex-row justify-center gap-4">
-                <a href="telas/index.html"
-                    class="inline-block bg-white text-indigo-600 font-semibold px-6 py-3 rounded-lg hover:bg-gray-100 transition shadow-md">
-                    <i class="fas fa-chalkboard-teacher mr-2"></i>Ver exemplo como professor
-                </a>
-                <a href="telas/cadastro.html"
-                    class="inline-block bg-indigo-500 text-white border border-indigo-300 font-semibold px-6 py-3 rounded-lg hover:bg-indigo-400 transition">
-                    <i class="fas fa-user-plus mr-2"></i>Criar conta grátis
-                </a>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-neutral-200">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-white text-lg"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gradient">CursoHub</h1>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-sm font-medium text-neutral-600 hover:text-primary-600 transition-colors">Recursos</a>
+                    <a href="#how-it-works" class="text-sm font-medium text-neutral-600 hover:text-primary-600 transition-colors">Como Funciona</a>
+                    <a href="#testimonials" class="text-sm font-medium text-neutral-600 hover:text-primary-600 transition-colors">Depoimentos</a>
+                    <a href="#pricing" class="text-sm font-medium text-neutral-600 hover:text-primary-600 transition-colors">Preços</a>
+                    <a href="telas/index.html" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Acessar Plataforma
+                    </a>
+                </div>
+                
+                <button class="md:hidden">
+                    <i class="fas fa-bars text-xl text-neutral-600"></i>
+                </button>
             </div>
-            <div class="mt-12">
-                <img src="https://via.placeholder.com/800x450" alt="Interface da SalinhaPro" class="rounded-lg shadow-xl max-w-full mx-auto">
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-20 gradient-primary text-white overflow-hidden relative">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-20 left-10 w-32 h-32 bg-white rounded-full blur-3xl"></div>
+            <div class="absolute bottom-20 right-10 w-24 h-24 bg-white rounded-full blur-2xl"></div>
+            <div class="absolute top-40 right-1/3 w-16 h-16 bg-white rounded-full blur-xl"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-6 relative">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="animate-fade-in-up">
+                    <div class="inline-flex items-center gap-2 bg-white/20 glass-effect rounded-full px-4 py-2 mb-6">
+                        <div class="w-2 h-2 bg-secondary-400 rounded-full animate-pulse"></div>
+                        <span class="text-sm font-medium">Nova versão 2025 disponível</span>
+                    </div>
+                    
+                    <h1 class="text-5xl lg:text-6xl font-bold leading-tight mb-6">
+                        Crie cursos
+                        <span class="text-secondary-300">profissionais</span>
+                        em minutos
+                    </h1>
+                    
+                    <p class="text-xl text-blue-100 mb-8 leading-relaxed">
+                        Plataforma completa para educadores criarem, organizarem e distribuírem cursos online de forma profissional e eficiente.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="telas/index.html" class="btn bg-white text-primary-700 hover:bg-neutral-100 px-8 py-4 text-lg font-semibold">
+                            <i class="fas fa-rocket"></i>
+                            Começar Gratuitamente
+                        </a>
+                        <a href="#demo" class="btn btn-ghost border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg">
+                            <i class="fas fa-play"></i>
+                            Ver Demonstração
+                        </a>
+                    </div>
+                    
+                    <div class="flex items-center gap-6 mt-8 text-sm">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check text-secondary-400"></i>
+                            <span>Sem taxas de setup</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check text-secondary-400"></i>
+                            <span>Suporte 24/7</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check text-secondary-400"></i>
+                            <span>14 dias grátis</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative animate-fade-in-up" style="animation-delay: 0.2s">
+                    <div class="relative z-10 bg-white/10 glass-effect rounded-2xl p-8 backdrop-blur-lg">
+                        <div class="bg-white rounded-xl p-6 shadow-2xl">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-3 h-3 bg-error rounded-full"></div>
+                                <div class="w-3 h-3 bg-warning rounded-full"></div>
+                                <div class="w-3 h-3 bg-success rounded-full"></div>
+                                <div class="flex-1 bg-neutral-100 rounded px-3 py-1">
+                                    <span class="text-xs text-neutral-500">cursohub.com/meu-curso</span>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="h-4 bg-neutral-200 rounded w-3/4"></div>
+                                <div class="h-3 bg-neutral-100 rounded w-full"></div>
+                                <div class="h-3 bg-neutral-100 rounded w-5/6"></div>
+                                <div class="bg-primary-50 rounded-lg p-4">
+                                    <div class="h-3 bg-primary-200 rounded w-1/2 mb-2"></div>
+                                    <div class="h-2 bg-primary-100 rounded w-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute -top-4 -right-4 w-20 h-20 gradient-secondary rounded-full blur-lg opacity-60"></div>
+                    <div class="absolute -bottom-4 -left-4 w-16 h-16 bg-white/20 rounded-full blur-lg"></div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Números -->
-    <section class="py-12 bg-white">
-        <div class="max-w-6xl mx-auto px-6">
+    <!-- Stats Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                <div>
-                    <p class="text-4xl font-bold text-indigo-600">2.500+</p>
-                    <p class="text-gray-600">Professores ativos</p>
+                <div class="animate-fade-in-up">
+                    <div class="text-4xl font-bold text-gradient mb-2">50K+</div>
+                    <div class="text-neutral-600">Cursos Criados</div>
                 </div>
-                <div>
-                    <p class="text-4xl font-bold text-indigo-600">15.000+</p>
-                    <p class="text-gray-600">Alunos beneficiados</p>
+                <div class="animate-fade-in-up" style="animation-delay: 0.1s">
+                    <div class="text-4xl font-bold text-gradient mb-2">200K+</div>
+                    <div class="text-neutral-600">Estudantes Ativos</div>
                 </div>
-                <div>
-                    <p class="text-4xl font-bold text-indigo-600">98%</p>
-                    <p class="text-gray-600">Taxa de satisfação</p>
+                <div class="animate-fade-in-up" style="animation-delay: 0.2s">
+                    <div class="text-4xl font-bold text-gradient mb-2">15K+</div>
+                    <div class="text-neutral-600">Educadores</div>
                 </div>
-                <div>
-                    <p class="text-4xl font-bold text-indigo-600">4.500+</p>
-                    <p class="text-gray-600">Salinhas criadas</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Benefícios -->
-    <section id="beneficios" class="py-16">
-        <div class="max-w-6xl mx-auto px-6 text-center">
-            <span class="text-indigo-600 font-semibold">BENEFÍCIOS</span>
-            <h3 class="text-3xl font-bold mb-4">Por que usar o SalinhaPro?</h3>
-            <p class="max-w-2xl mx-auto mb-10 text-gray-600">Nossa plataforma foi desenvolvida por professores para professores, com foco em praticidade e eficiência.</p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                <div class="bg-white p-6 rounded-lg shadow-md feature-card">
-                    <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-folder text-indigo-600 text-xl"></i>
-                    </div>
-                    <h4 class="text-xl font-semibold mb-2">Organização completa</h4>
-                    <p class="text-gray-600">Mantenha todas as suas aulas, apostilas e correções em um só painel acessível e bem estruturado.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md feature-card">
-                    <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-video text-indigo-600 text-xl"></i>
-                    </div>
-                    <h4 class="text-xl font-semibold mb-2">Aulas com vídeo</h4>
-                    <p class="text-gray-600">Adicione links de vídeo (YouTube, Vimeo ou Drive) para seus alunos acessarem facilmente.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md feature-card">
-                    <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-chalkboard-teacher text-indigo-600 text-xl"></i>
-                    </div>
-                    <h4 class="text-xl font-semibold mb-2">Profissionalismo</h4>
-                    <p class="text-gray-600">Transmita mais seriedade e valorize seu cursinho ou projeto de aulas particulares.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md feature-card">
-                    <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-chart-line text-indigo-600 text-xl"></i>
-                    </div>
-                    <h4 class="text-xl font-semibold mb-2">Estatísticas de acesso</h4>
-                    <p class="text-gray-600">Acompanhe quem visualizou suas aulas e quanto tempo permaneceu na plataforma.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md feature-card">
-                    <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-mobile-alt text-indigo-600 text-xl"></i>
-                    </div>
-                    <h4 class="text-xl font-semibold mb-2">Responsivo</h4>
-                    <p class="text-gray-600">Acesse pelo celular, tablet ou computador. A plataforma se adapta a qualquer dispositivo.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md feature-card">
-                    <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-users text-indigo-600 text-xl"></i>
-                    </div>
-                    <h4 class="text-xl font-semibold mb-2">Interação com alunos</h4>
-                    <p class="text-gray-600">Sistema de comentários e chat integrado para tirar dúvidas e interagir.</p>
+                <div class="animate-fade-in-up" style="animation-delay: 0.3s">
+                    <div class="text-4xl font-bold text-gradient mb-2">4.9/5</div>
+                    <div class="text-neutral-600">Avaliação</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Como funciona -->
-    <section id="funciona" class="bg-gray-100 py-16">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="text-center mb-12">
-                <span class="text-indigo-600 font-semibold">PROCESSO SIMPLES</span>
-                <h3 class="text-3xl font-bold mb-4">Como funciona?</h3>
-                <p class="max-w-2xl mx-auto text-gray-600">Em apenas três passos você já estará com sua salinha digital no ar!</p>
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-neutral-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center gap-2 bg-primary-50 text-primary-600 rounded-full px-4 py-2 mb-4">
+                    <i class="fas fa-star"></i>
+                    <span class="text-sm font-medium">Recursos Principais</span>
+                </div>
+                <h2 class="text-4xl font-bold text-neutral-900 mb-4">
+                    Tudo que você precisa para
+                    <span class="text-gradient">educar online</span>
+                </h2>
+                <p class="text-xl text-neutral-600 max-w-3xl mx-auto">
+                    Ferramentas profissionais e intuitivas para criar experiências de aprendizado memoráveis
+                </p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                <div class="bg-white p-8 rounded-lg shadow-md relative">
-                    <div class="bg-indigo-600 text-white w-10 h-10 rounded-full flex items-center justify-center absolute -top-4 -left-4">1</div>
-                    <img src="https://via.placeholder.com/300x180" alt="Criação de salinha" class="rounded-md mb-4 w-full">
-                    <h4 class="font-semibold text-lg mb-2">Crie sua salinha</h4>
-                    <p class="text-gray-600">Dê um nome, personalize as cores, adicione sua videoaula, apostilas e questões em nossa interface amigável.</p>
-                </div>
-                <div class="bg-white p-8 rounded-lg shadow-md relative">
-                    <div class="bg-indigo-600 text-white w-10 h-10 rounded-full flex items-center justify-center absolute -top-4 -left-4">2</div>
-                    <img src="https://via.placeholder.com/300x180" alt="Compartilhamento" class="rounded-md mb-4 w-full">
-                    <h4 class="font-semibold text-lg mb-2">Compartilhe com os alunos</h4>
-                    <p class="text-gray-600">Envie o link da salinha para seus estudantes com um clique ou use nosso sistema de convites por email.</p>
-                </div>
-                <div class="bg-white p-8 rounded-lg shadow-md relative">
-                    <div class="bg-indigo-600 text-white w-10 h-10 rounded-full flex items-center justify-center absolute -top-4 -left-4">3</div>
-                    <img src="https://via.placeholder.com/300x180" alt="Acompanhamento" class="rounded-md mb-4 w-full">
-                    <h4 class="font-semibold text-lg mb-2">Acompanhe o progresso</h4>
-                    <p class="text-gray-600">Atualize sua salinha com novos materiais, veja quem acessou e acompanhe o desempenho dos seus alunos.</p>
-                </div>
-            </div>
-            
-            <div class="text-center mt-12">
-                <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium inline-flex items-center">
-                    Ver demonstração em vídeo <i class="fas fa-play-circle ml-2"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Depoimentos -->
-    <section id="depoimentos" class="py-16 bg-white">
-        <div class="max-w-6xl mx-auto px-6 text-center">
-            <span class="text-indigo-600 font-semibold">DEPOIMENTOS</span>
-            <h3 class="text-3xl font-bold mb-4">O que dizem nossos professores</h3>
-            <p class="max-w-2xl mx-auto mb-12 text-gray-600">Centenas de professores já estão transformando suas aulas com o SalinhaPro.</p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-lg shadow border border-gray-100 testimonial-card">
-                    <div class="flex items-center mb-4">
-                        <img src="https://via.placeholder.com/60" alt="Foto de perfil" class="w-12 h-12 rounded-full">
-                        <div class="ml-4 text-left">
-                            <h5 class="font-semibold">Carla Mendes</h5>
-                            <p class="text-sm text-gray-500">Professora de Biologia</p>
-                        </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card card-feature animate-fade-in-up">
+                    <div class="icon">
+                        <i class="fas fa-video"></i>
                     </div>
-                    <div class="text-yellow-400 mb-3">
-                        ★★★★★
-                    </div>
-                    <p class="text-gray-700 text-left">"Revolucionou minhas aulas particulares! Consigo organizar todo o conteúdo em um só lugar e meus alunos adoram a praticidade."</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow border border-gray-100 testimonial-card">
-                    <div class="flex items-center mb-4">
-                        <img src="https://via.placeholder.com/60" alt="Foto de perfil" class="w-12 h-12 rounded-full">
-                        <div class="ml-4 text-left">
-                            <h5 class="font-semibold">Ricardo Oliveira</h5>
-                            <p class="text-sm text-gray-500">Professor de Matemática</p>
-                        </div>
-                    </div>
-                    <div class="text-yellow-400 mb-3">
-                        ★★★★★
-                    </div>
-                    <p class="text-gray-700 text-left">"Economizei horas de trabalho com a organização automática. Além disso, a possibilidade de acompanhar quem assistiu às aulas é um diferencial incrível."</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow border border-gray-100 testimonial-card">
-                    <div class="flex items-center mb-4">
-                        <img src="https://via.placeholder.com/60" alt="Foto de perfil" class="w-12 h-12 rounded-full">
-                        <div class="ml-4 text-left">
-                            <h5 class="font-semibold">Mariana Costa</h5>
-                            <p class="text-sm text-gray-500">Professora de Inglês</p>
-                        </div>
-                    </div>
-                    <div class="text-yellow-400 mb-3">
-                        ★★★★★
-                    </div>
-                    <p class="text-gray-700 text-left">"Meus alunos se engajam muito mais desde que comecei a usar o SalinhaPro. A interface é intuitiva e o suporte é excelente quando precisei."</p>
-                </div>
-            </div>
-            
-            <a href="#" class="mt-10 inline-block text-indigo-600 hover:text-indigo-800">Ver mais depoimentos →</a>
-        </div>
-    </section>
-
-    <!-- Planos e Preços -->
-    <section id="precos" class="py-16 bg-gray-50">
-        <div class="max-w-6xl mx-auto px-6 text-center">
-            <span class="text-indigo-600 font-semibold">PLANOS</span>
-            <h3 class="text-3xl font-bold mb-4">Escolha o plano ideal para você</h3>
-            <p class="max-w-2xl mx-auto mb-12 text-gray-600">Temos opções para todos os perfis, desde professores iniciantes até escolas completas.</p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-lg shadow-md border border-gray-200">
-                    <h4 class="text-xl font-bold mb-4">Básico</h4>
-                    <p class="text-gray-600 mb-6">Ideal para professores iniciantes</p>
-                    <div class="text-4xl font-bold mb-6">Grátis</div>
-                    <ul class="text-left space-y-3 mb-8">
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Até 3 salinhas</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Até 20 alunos por salinha</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Materiais ilimitados</span>
-                        </li>
-                        <li class="flex items-start text-gray-400">
-                            <i class="fas fa-times text-gray-400 mt-1 mr-2"></i>
-                            <span>Estatísticas básicas</span>
-                        </li>
-                    </ul>
-                    <a href="telas/cadastro.html" class="block w-full py-3 bg-gray-100 text-gray-800 rounded-lg font-semibold hover:bg-gray-200 transition">Começar agora</a>
+                    <h3 class="text-xl font-semibold mb-3 text-neutral-900">Vídeos HD</h3>
+                    <p class="text-neutral-600">Upload de vídeos em alta qualidade com player otimizado e controles avançados</p>
                 </div>
                 
-                <div class="bg-white p-8 rounded-lg shadow-md border-2 border-indigo-500 transform scale-105">
-                    <div class="bg-indigo-500 text-white text-sm py-1 px-3 rounded-full inline-block mb-4">POPULAR</div>
-                    <h4 class="text-xl font-bold mb-4">Profissional</h4>
-                    <p class="text-gray-600 mb-6">Para professores ativos</p>
-                    <div class="text-4xl font-bold mb-6">R$ 39<span class="text-base font-normal">/mês</span></div>
-                    <ul class="text-left space-y-3 mb-8">
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Até 10 salinhas</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Até 100 alunos por salinha</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Materiais ilimitados</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Estatísticas avançadas</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Domínio personalizado</span>
-                        </li>
-                    </ul>
-                    <a href="telas/cadastro.html" class="block w-full py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">Assinar agora</a>
+                <div class="card card-feature animate-fade-in-up" style="animation-delay: 0.1s">
+                    <div class="icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-neutral-900">Analytics Avançado</h3>
+                    <p class="text-neutral-600">Acompanhe o progresso dos alunos com relatórios detalhados e métricas de engajamento</p>
                 </div>
                 
-                <div class="bg-white p-8 rounded-lg shadow-md border border-gray-200">
-                    <h4 class="text-xl font-bold mb-4">Escola</h4>
-                    <p class="text-gray-600 mb-6">Para instituições completas</p>
-                    <div class="text-4xl font-bold mb-6">R$ 99<span class="text-base font-normal">/mês</span></div>
-                    <ul class="text-left space-y-3 mb-8">
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Salinhas ilimitadas</span>
+                <div class="card card-feature animate-fade-in-up" style="animation-delay: 0.2s">
+                    <div class="icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-neutral-900">100% Responsivo</h3>
+                    <p class="text-neutral-600">Acesso perfeito em qualquer dispositivo - desktop, tablet ou smartphone</p>
+                </div>
+                
+                <div class="card card-feature animate-fade-in-up" style="animation-delay: 0.3s">
+                    <div class="icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-neutral-900">Certificados</h3>
+                    <p class="text-neutral-600">Emissão automática de certificados personalizados ao completar os cursos</p>
+                </div>
+                
+                <div class="card card-feature animate-fade-in-up" style="animation-delay: 0.4s">
+                    <div class="icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-neutral-900">Interação</h3>
+                    <p class="text-neutral-600">Sistema de comentários, Q&A e chat para maior engajamento dos alunos</p>
+                </div>
+                
+                <div class="card card-feature animate-fade-in-up" style="animation-delay: 0.5s">
+                    <div class="icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-neutral-900">Segurança</h3>
+                    <p class="text-neutral-600">Proteção avançada do conteúdo com criptografia e controle de acesso</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works -->
+    <section id="how-it-works" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-neutral-900 mb-4">Como funciona</h2>
+                <p class="text-xl text-neutral-600">Três passos simples para começar</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-12">
+                <div class="text-center animate-fade-in-up">
+                    <div class="relative mb-8">
+                        <div class="w-20 h-20 gradient-primary rounded-2xl flex items-center justify-center mx-auto">
+                            <span class="text-2xl font-bold text-white">1</span>
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-6 h-6 bg-secondary-400 rounded-full"></div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Crie seu curso</h3>
+                    <p class="text-neutral-600">Upload de vídeos, materiais e criação da estrutura do curso em nossa interface intuitiva</p>
+                </div>
+                
+                <div class="text-center animate-fade-in-up" style="animation-delay: 0.2s">
+                    <div class="relative mb-8">
+                        <div class="w-20 h-20 gradient-primary rounded-2xl flex items-center justify-center mx-auto">
+                            <span class="text-2xl font-bold text-white">2</span>
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-6 h-6 bg-secondary-400 rounded-full"></div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Publique online</h3>
+                    <p class="text-neutral-600">Compartilhe com seus alunos através de link personalizado ou integre em seu site</p>
+                </div>
+                
+                <div class="text-center animate-fade-in-up" style="animation-delay: 0.4s">
+                    <div class="relative mb-8">
+                        <div class="w-20 h-20 gradient-primary rounded-2xl flex items-center justify-center mx-auto">
+                            <span class="text-2xl font-bold text-white">3</span>
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-6 h-6 bg-secondary-400 rounded-full"></div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Acompanhe resultados</h3>
+                    <p class="text-neutral-600">Monitore o progresso dos alunos com relatórios detalhados e métricas de performance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-20 bg-neutral-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-neutral-900 mb-4">O que nossos educadores dizem</h2>
+                <p class="text-xl text-neutral-600">Histórias de sucesso reais</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card animate-fade-in-up">
+                    <div class="flex items-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b5bb?w=60&h=60&fit=crop&crop=face&auto=format" alt="Marina Silva" class="w-12 h-12 rounded-full object-cover">
+                        <div class="ml-4">
+                            <h4 class="font-semibold">Marina Silva</h4>
+                            <p class="text-sm text-neutral-600">Professora de Marketing Digital</p>
+                        </div>
+                    </div>
+                    <div class="text-yellow-400 mb-3">★★★★★</div>
+                    <p class="text-neutral-600">"Revolucionou minha forma de ensinar. Consegui alcançar 5x mais alunos e meus cursos ficaram muito mais profissionais."</p>
+                </div>
+                
+                <div class="card animate-fade-in-up" style="animation-delay: 0.2s">
+                    <div class="flex items-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face&auto=format" alt="Carlos Mendoza" class="w-12 h-12 rounded-full object-cover">
+                        <div class="ml-4">
+                            <h4 class="font-semibold">Carlos Mendoza</h4>
+                            <p class="text-sm text-neutral-600">Instrutor de Programação</p>
+                        </div>
+                    </div>
+                    <div class="text-yellow-400 mb-3">★★★★★</div>
+                    <p class="text-neutral-600">"Plataforma incrível! Os analytics me ajudam a entender exatamente onde meus alunos têm dificuldades."</p>
+                </div>
+                
+                <div class="card animate-fade-in-up" style="animation-delay: 0.4s">
+                    <div class="flex items-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face&auto=format" alt="Ana Costa" class="w-12 h-12 rounded-full object-cover">
+                        <div class="ml-4">
+                            <h4 class="font-semibold">Ana Costa</h4>
+                            <p class="text-sm text-neutral-600">Coach de Desenvolvimento Pessoal</p>
+                        </div>
+                    </div>
+                    <div class="text-yellow-400 mb-3">★★★★★</div>
+                    <p class="text-neutral-600">"Interface intuitiva e suporte excepcional. Recomendo para qualquer educador que quer crescer online."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-neutral-900 mb-4">Planos para todos os tamanhos</h2>
+                <p class="text-xl text-neutral-600">Escolha o plano ideal para seu negócio</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <div class="card text-center">
+                    <h3 class="text-xl font-semibold mb-4">Essencial</h3>
+                    <div class="text-4xl font-bold text-gradient mb-4">R$ 29<span class="text-lg text-neutral-500">/mês</span></div>
+                    <ul class="space-y-3 mb-8 text-left">
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-success"></i>
+                            <span>Até 5 cursos</span>
                         </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-success"></i>
+                            <span>100 alunos por curso</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-success"></i>
+                            <span>Analytics básico</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-success"></i>
+                            <span>Suporte por email</span>
+                        </li>
+                    </ul>
+                    <a href="telas/index.html" class="btn btn-secondary w-full">Começar Agora</a>
+                </div>
+                
+                <div class="card text-center border-2 border-primary-200 relative">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                        <span class="bg-gradient-primary text-white px-4 py-1 rounded-full text-sm font-medium">POPULAR</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Profissional</h3>
+                    <div class="text-4xl font-bold text-gradient mb-4">R$ 79<span class="text-lg text-neutral-500">/mês</span></div>
+                    <ul class="space-y-3 mb-8 text-left">
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-success"></i>
+                            <span>Cursos ilimitados</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-success"></i>
+                            <span>1000 alunos por curso</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-success"></i>
+                            <span>Analytics avançado</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-success"></i>
+                            <span>Certificados personalizados</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-success"></i>
+                            <span>Suporte prioritário</span>
+                        </li>
+                    </ul>
+                    <a href="telas/index.html" class="btn btn-primary w-full">Escolher Plano</a>
+                </div>
+                
+                <div class="card text-center">
+                    <h3 class="text-xl font-semibold mb-4">Empresarial</h3>
+                    <div class="text-4xl font-bold text-gradient mb-4">R$ 199<span class="text-lg text-neutral-500">/mês</span></div>
+                    <ul class="space-y-3 mb-8 text-left">
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-success"></i>
+                            <span>Tudo do Profissional</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-success"></i>
                             <span>Alunos ilimitados</span>
                         </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Materiais ilimitados</span>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-success"></i>
+                            <span>White label</span>
                         </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Estatísticas avançadas</span>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-success"></i>
+                            <span>API personalizada</span>
                         </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>API para integração</span>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-success"></i>
+                            <span>Gerente dedicado</span>
                         </li>
                     </ul>
-                    <a href="telas/cadastro.html" class="block w-full py-3 bg-gray-800 text-white rounded-lg font-semibold hover:bg-gray-900 transition">Contatar vendas</a>
+                    <a href="telas/index.html" class="btn btn-secondary w-full">Falar com Vendas</a>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="py-16 bg-white">
-        <div class="max-w-4xl mx-auto px-6">
-            <div class="text-center mb-12">
-                <h3 class="text-3xl font-bold mb-4">Perguntas frequentes</h3>
-                <p class="text-gray-600">Tire suas dúvidas sobre o SalinhaPro</p>
-            </div>
-            
-            <div class="space-y-6">
-                <div class="border border-gray-200 rounded-lg p-6">
-                    <h4 class="font-semibold text-lg mb-2">Preciso ter conhecimentos técnicos para usar?</h4>
-                    <p class="text-gray-600">Não! O SalinhaPro foi desenvolvido para ser intuitivo e fácil de usar, mesmo para quem não tem familiaridade com tecnologia.</p>
-                </div>
-                <div class="border border-gray-200 rounded-lg p-6">
-                    <h4 class="font-semibold text-lg mb-2">Posso cancelar minha assinatura a qualquer momento?</h4>
-                    <p class="text-gray-600">Sim! Não há contratos de fidelidade. Você pode cancelar sua assinatura quando quiser sem taxas adicionais.</p>
-                </div>
-                <div class="border border-gray-200 rounded-lg p-6">
-                    <h4 class="font-semibold text-lg mb-2">Como meus alunos acessam a salinha?</h4>
-                    <p class="text-gray-600">Você pode compartilhar o link da sua salinha por WhatsApp, email ou qualquer plataforma. Também é possível gerar convites diretos pelo sistema.</p>
-                </div>
-                <div class="border border-gray-200 rounded-lg p-6">
-                    <h4 class="font-semibold text-lg mb-2">O SalinhaPro funciona em qualquer dispositivo?</h4>
-                    <p class="text-gray-600">Sim! Nossa plataforma é responsiva e funciona perfeitamente em computadores, tablets e smartphones.</p>
-                </div>
-            </div>
-            
-            <div class="text-center mt-8">
-                <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Ver todas as perguntas →</a>
             </div>
         </div>
     </section>
 
     <!-- CTA Final -->
-    <section class="py-20 text-center bg-gradient-to-br from-indigo-600 to-indigo-800 text-white">
-        <div class="max-w-4xl mx-auto px-6">
-            <h3 class="text-3xl font-bold mb-4">Comece a organizar suas aulas hoje mesmo</h3>
-            <p class="mb-8 text-lg text-indigo-100">Sua salinha, do seu jeito. Totalmente online, simples e eficaz.</p>
-            <div class="flex flex-col md:flex-row justify-center gap-4">
-                <a href="telas/cadastro.html" class="bg-white text-indigo-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg">
-                    <i class="fas fa-rocket mr-2"></i>Criar minha salinha grátis
+    <section class="py-20 gradient-primary text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-10 left-20 w-40 h-40 bg-white rounded-full blur-3xl"></div>
+            <div class="absolute bottom-10 right-20 w-32 h-32 bg-white rounded-full blur-2xl"></div>
+        </div>
+        
+        <div class="max-w-4xl mx-auto px-6 text-center relative">
+            <h2 class="text-4xl font-bold mb-6">Pronto para transformar sua educação?</h2>
+            <p class="text-xl text-blue-100 mb-8">Junte-se a milhares de educadores que já revolucionaram sua forma de ensinar</p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="telas/index.html" class="btn bg-white text-primary-700 hover:bg-neutral-100 px-8 py-4 text-lg font-semibold">
+                    <i class="fas fa-rocket"></i>
+                    Começar Gratuitamente
                 </a>
-                <a href="telas/contato.html" class="bg-transparent border border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-indigo-700 transition">
-                    <i class="fas fa-headset mr-2"></i>Falar com consultor
+                <a href="#demo" class="btn btn-ghost border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg">
+                    <i class="fas fa-calendar"></i>
+                    Agendar Demo
                 </a>
             </div>
+            
+            <p class="text-sm text-blue-100 mt-6">Sem compromisso • Cancele quando quiser • Suporte 24/7</p>
         </div>
     </section>
 
-    <!-- Rodapé -->
-    <footer class="bg-gray-800 text-gray-300 py-12">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center space-x-2 mb-4">
-                        <img src="https://via.placeholder.com/40" alt="Logo SalinhaPro" class="h-8 w-auto">
-                        <h5 class="text-xl font-bold text-white">SalinhaPro</h5>
+    <!-- Footer -->
+    <footer class="bg-neutral-900 text-neutral-300 py-16">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8 mb-12">
+                <div class="col-span-2 md:col-span-1">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center">
+                            <i class="fas fa-graduation-cap text-white text-lg"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">CursoHub</h3>
                     </div>
-                    <p class="text-sm mb-4">Transformando a forma como professores organizam e compartilham suas aulas.</p>
+                    <p class="text-neutral-400 mb-6">Transformando a educação online com tecnologia de ponta e design excepcional.</p>
                     <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-youtube"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
                     </div>
                 </div>
+                
                 <div>
-                    <h5 class="font-semibold mb-4 text-white">Produto</h5>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-white transition">Recursos</a></li>
-                        <li><a href="#" class="hover:text-white transition">Planos e preços</a></li>
-                        <li><a href="#" class="hover:text-white transition">Atualizações</a></li>
-                        <li><a href="#" class="hover:text-white transition">Integrações</a></li>
+                    <h4 class="font-semibold text-white mb-4">Produto</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="hover:text-white transition-colors">Recursos</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Preços</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Integrações</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">API</a></li>
                     </ul>
                 </div>
+                
                 <div>
-                    <h5 class="font-semibold mb-4 text-white">Suporte</h5>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-white transition">Central de ajuda</a></li>
-                        <li><a href="#" class="hover:text-white transition">Tutoriais</a></li>
-                        <li><a href="#" class="hover:text-white transition">FAQ</a></li>
-                        <li><a href="#" class="hover:text-white transition">Contato</a></li>
+                    <h4 class="font-semibold text-white mb-4">Suporte</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="hover:text-white transition-colors">Central de Ajuda</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Documentação</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Status</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contato</a></li>
                     </ul>
                 </div>
+                
                 <div>
-                    <h5 class="font-semibold mb-4 text-white">Empresa</h5>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-white transition">Sobre nós</a></li>
-                        <li><a href="#" class="hover:text-white transition">Blog</a></li>
-                        <li><a href="#" class="hover:text-white transition">Carreiras</a></li>
-                        <li><a href="#" class="hover:text-white transition">Termos de uso</a></li>
-                        <li><a href="#" class="hover:text-white transition">Privacidade</a></li>
+                    <h4 class="font-semibold text-white mb-4">Empresa</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="hover:text-white transition-colors">Sobre</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Carreiras</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Termos</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-gray-700 mt-10 pt-6 text-sm text-center">
-                <p>© 2025 SalinhaPro - Todos os direitos reservados.</p>
+            
+            <div class="border-t border-neutral-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-neutral-400">© 2025 CursoHub. Todos os direitos reservados.</p>
+                <div class="flex items-center gap-6 mt-4 md:mt-0">
+                    <a href="#" class="text-neutral-400 hover:text-white transition-colors">Privacidade</a>
+                    <a href="#" class="text-neutral-400 hover:text-white transition-colors">Termos</a>
+                    <a href="#" class="text-neutral-400 hover:text-white transition-colors">Cookies</a>
+                </div>
             </div>
         </div>
     </footer>
 
-    <!-- Script para o menu mobile -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuButton = document.querySelector('.md\\:hidden.text-gray-700');
-            const mobileMenu = document.querySelector('.hidden.px-6.py-4.bg-white.md\\:hidden');
-            
-            menuButton.addEventListener('click', function() {
-                mobileMenu.classList.toggle('hidden');
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             });
         });
-    </script>
 
+        // Mobile menu toggle
+        const mobileMenuButton = document.querySelector('.md\\:hidden');
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', function() {
+                // Add mobile menu functionality here
+                console.log('Mobile menu clicked');
+            });
+        }
+
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.classList.add('bg-white/95');
+            } else {
+                nav.classList.remove('bg-white/95');
+            }
+        });
+    </script>
 </body>
 
 </html>

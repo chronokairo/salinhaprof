@@ -4,73 +4,496 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Salinha - Aula de Matemática</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-
+    <title>Matemática Básica - CursoHub</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
 </head>
 
-<body class="bg-gray-100 text-gray-800 font-sans">
-    <!-- Cabeçalho -->
-    <header class="bg-white shadow p-4">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Salinha de Matemática</h1>
-            <p class="text-sm text-gray-600">com Prof. João | 21 de Maio</p>
-        </div>
-    </header>
-
-    <!-- Conteúdo -->
-    <main class="max-w-6xl mx-auto p-6 space-y-8">
-        <!-- Botão de voltar -->
-        <div>
-            <a href="index.html" class="inline-block mb-6 text-sm text-indigo-600 hover:underline">
-                ← Voltar para o painel
-            </a>
-        </div>
-        <!-- Vídeo da Aula -->
-        <section>
-            <h2 class="text-xl font-semibold mb-2">🎥 Aula do Dia</h2>
-            <div class="aspect-video bg-black rounded-lg overflow-hidden shadow">
-                <iframe class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0"
-                    allowfullscreen></iframe>
+<body class="bg-neutral-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-neutral-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="back-button">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Voltar ao Painel
+                    </a>
+                    <div class="hidden md:flex items-center space-x-3">
+                        <div class="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center">
+                            <i class="fas fa-calculator text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h1 class="font-bold text-lg text-neutral-800">Matemática Básica</h1>
+                            <p class="text-sm text-neutral-500">Prof. João Silva</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex items-center space-x-2 text-sm">
+                        <div class="flex items-center space-x-1 text-success">
+                            <i class="fas fa-check-circle"></i>
+                            <span>75% Concluído</span>
+                        </div>
+                        <div class="w-20 h-2 bg-neutral-200 rounded-full overflow-hidden">
+                            <div class="w-3/4 h-full bg-success rounded-full"></div>
+                        </div>
+                    </div>
+                    <button class="btn btn-ghost text-sm">
+                        <i class="fas fa-bookmark mr-2"></i>
+                        Salvar
+                    </button>
+                </div>
             </div>
-        </section>
+            
+            <!-- Mobile Course Info -->
+            <div class="md:hidden mt-4 flex items-center space-x-3">
+                <div class="w-10 h-10 gradient-primary rounded-lg flex items-center justify-center">
+                    <i class="fas fa-calculator text-white"></i>
+                </div>
+                <div class="flex-1">
+                    <h1 class="font-bold text-lg text-neutral-800">Matemática Básica</h1>
+                    <p class="text-sm text-neutral-500">Prof. João Silva • 75% Concluído</p>
+                    <div class="w-full h-2 bg-neutral-200 rounded-full overflow-hidden mt-2">
+                        <div class="w-3/4 h-full bg-success rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-        <!-- Atividades -->
-        <section>
-            <h2 class="text-xl font-semibold mb-2">📝 Atividades</h2>
-            <ul class="space-y-3">
-                <li class="bg-white p-4 rounded shadow">
-                    Resolva os exercícios 1 a 5 da apostila, páginas 12 a 14.
-                </li>
-                <li class="bg-white p-4 rounded shadow">
-                    Responda à questão dissertativa: “Explique a diferença entre fração imprópria e mista.”
-                </li>
-            </ul>
-            <button class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">📘 Ver
-                Gabarito / Correção</button>
-        </section>
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Main Content Area -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Video Player -->
+                <div class="card p-0 overflow-hidden">
+                    <div class="aspect-video bg-black relative rounded-t-2xl overflow-hidden">
+                        <iframe 
+                            class="w-full h-full" 
+                            src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1" 
+                            frameborder="0" 
+                            allowfullscreen>
+                        </iframe>
+                        <!-- Custom Controls Overlay -->
+                        <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
+                            <div class="flex items-center space-x-2 text-sm">
+                                <i class="fas fa-play"></i>
+                                <span>15:30 / 45:00</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="hover:text-primary-300"><i class="fas fa-expand"></i></button>
+                                <button class="hover:text-primary-300"><i class="fas fa-cog"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <h2 class="text-2xl font-bold text-neutral-800 mb-2">Aula 3: Frações e Números Decimais</h2>
+                        <p class="text-neutral-600 mb-4">Nesta aula aprenderemos os conceitos fundamentais sobre frações, como convertê-las em números decimais e realizar operações básicas.</p>
+                        
+                        <div class="flex items-center justify-between text-sm">
+                            <div class="flex items-center space-x-4">
+                                <span class="flex items-center space-x-1 text-neutral-500">
+                                    <i class="fas fa-clock"></i>
+                                    <span>45 min</span>
+                                </span>
+                                <span class="flex items-center space-x-1 text-neutral-500">
+                                    <i class="fas fa-eye"></i>
+                                    <span>1.2k visualizações</span>
+                                </span>
+                                <span class="flex items-center space-x-1 text-neutral-500">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>21 de Janeiro</span>
+                                </span>
+                            </div>
+                            
+                            <div class="flex items-center space-x-2">
+                                <button class="btn btn-ghost text-sm">
+                                    <i class="fas fa-share mr-2"></i>
+                                    Compartilhar
+                                </button>
+                                <button class="btn btn-secondary text-sm">
+                                    <i class="fas fa-download mr-2"></i>
+                                    Material
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <!-- Materiais -->
-        <section>
-            <h2 class="text-xl font-semibold mb-2">📚 Apostilas e Materiais</h2>
-            <ul class="space-y-2">
-                <li>
-                    <a href="#" class="text-indigo-600 hover:underline">📄 Apostila Capítulo 3 - Frações (PDF)</a>
-                </li>
-                <li>
-                    <a href="#" class="text-indigo-600 hover:underline">📎 Lista extra de exercícios (PDF)</a>
-                </li>
-                <li>
-                    <a href="#" class="text-indigo-600 hover:underline">📥 Slides da aula (PPT)</a>
-                </li>
-            </ul>
-        </section>
-    </main>
+                <!-- Course Navigation -->
+                <div class="card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold">Navegação da Aula</h3>
+                        <span class="text-sm text-neutral-500">Aula 3 de 12</span>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button class="btn btn-ghost flex-1">
+                            <i class="fas fa-chevron-left mr-2"></i>
+                            Aula Anterior
+                        </button>
+                        <button class="btn btn-primary flex-1" onclick="markAsComplete()">
+                            <i class="fas fa-check mr-2"></i>
+                            Marcar como Concluída
+                        </button>
+                        <button class="btn btn-ghost flex-1">
+                            Próxima Aula
+                            <i class="fas fa-chevron-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
 
-    <!-- Rodapé -->
-    <footer class="bg-white text-center py-4 mt-8 text-sm text-gray-500">
-        © 2025 SalinhaPro
-    </footer>
+                <!-- Exercise Section -->
+                <div class="card">
+                    <h3 class="text-lg font-semibold mb-4">
+                        <i class="fas fa-tasks text-primary-600 mr-2"></i>
+                        Exercícios Práticos
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 bg-neutral-50 rounded-lg">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex-1">
+                                    <h4 class="font-medium mb-2">Questão 1: Conversão de Frações</h4>
+                                    <p class="text-sm text-neutral-600">Converta a fração 3/4 em número decimal:</p>
+                                </div>
+                                <span class="text-xs text-success bg-success/10 px-2 py-1 rounded">Concluído</span>
+                            </div>
+                            <div class="flex items-center space-x-3 text-sm">
+                                <span class="text-neutral-500">Sua resposta: 0.75</span>
+                                <i class="fas fa-check text-success"></i>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-primary-50 border border-primary-200 rounded-lg">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex-1">
+                                    <h4 class="font-medium mb-2">Questão 2: Operações com Frações</h4>
+                                    <p class="text-sm text-neutral-600">Calcule: 1/2 + 3/4 = ?</p>
+                                </div>
+                                <span class="text-xs text-primary-600 bg-primary-100 px-2 py-1 rounded">Em Andamento</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <input type="text" class="flex-1 px-3 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="Digite sua resposta...">
+                                <button class="btn btn-primary">Verificar</button>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-neutral-50 rounded-lg opacity-60">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex-1">
+                                    <h4 class="font-medium mb-2">Questão 3: Comparação de Frações</h4>
+                                    <p class="text-sm text-neutral-600">Compare as frações: 2/3 e 5/8</p>
+                                </div>
+                                <span class="text-xs text-neutral-500 bg-neutral-200 px-2 py-1 rounded">Bloqueado</span>
+                            </div>
+                            <p class="text-xs text-neutral-500">Complete a questão anterior para desbloquear</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Discussion Section -->
+                <div class="card">
+                    <h3 class="text-lg font-semibold mb-4">
+                        <i class="fas fa-comments text-primary-600 mr-2"></i>
+                        Dúvidas e Discussões
+                    </h3>
+                    
+                    <!-- Comment Form -->
+                    <div class="mb-6">
+                        <textarea 
+                            class="w-full px-4 py-3 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none" 
+                            rows="3" 
+                            placeholder="Faça uma pergunta ou compartilhe suas dúvidas sobre esta aula...">
+                        </textarea>
+                        <div class="flex justify-end mt-2">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-paper-plane mr-2"></i>
+                                Enviar Pergunta
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Comments -->
+                    <div class="space-y-4">
+                        <div class="flex space-x-3">
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b5bb?w=40&h=40&fit=crop&crop=face&auto=format" alt="Maria Santos" class="w-10 h-10 rounded-full object-cover">
+                            <div class="flex-1">
+                                <div class="bg-neutral-50 rounded-lg p-4">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h4 class="font-medium text-sm">Maria Santos</h4>
+                                        <span class="text-xs text-neutral-500">2 horas atrás</span>
+                                    </div>
+                                    <p class="text-sm text-neutral-700">Professor, tenho dúvida sobre como simplificar frações. Poderia dar mais um exemplo?</p>
+                                </div>
+                                
+                                <!-- Reply -->
+                                <div class="flex space-x-3 mt-3 ml-4">
+                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face&auto=format" alt="Prof. João" class="w-8 h-8 rounded-full object-cover">
+                                    <div class="flex-1 bg-primary-50 rounded-lg p-3">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <h4 class="font-medium text-sm text-primary-700">Prof. João Silva</h4>
+                                            <span class="text-xs text-neutral-500">1 hora atrás</span>
+                                        </div>
+                                        <p class="text-sm text-neutral-700">Claro, Maria! Para simplificar 12/16, encontramos o MDC de 12 e 16, que é 4. Dividindo ambos por 4: 12÷4 = 3 e 16÷4 = 4. Resultado: 3/4</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-3">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face&auto=format" alt="João Oliveira" class="w-10 h-10 rounded-full object-cover">
+                            <div class="flex-1">
+                                <div class="bg-neutral-50 rounded-lg p-4">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h4 class="font-medium text-sm">João Oliveira</h4>
+                                        <span class="text-xs text-neutral-500">4 horas atrás</span>
+                                    </div>
+                                    <p class="text-sm text-neutral-700">Excelente aula! Agora entendo melhor a conversão de frações para decimais. 👏</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- Course Progress -->
+                <div class="card">
+                    <h3 class="font-semibold mb-4">Progresso do Curso</h3>
+                    <div class="text-center mb-4">
+                        <div class="relative w-24 h-24 mx-auto">
+                            <svg class="w-24 h-24 transform -rotate-90">
+                                <circle cx="12" cy="12" r="10" transform="translate(36,36)" fill="none" stroke="var(--neutral-200)" stroke-width="2"/>
+                                <circle cx="12" cy="12" r="10" transform="translate(36,36)" fill="none" stroke="var(--primary-500)" stroke-width="2" 
+                                        stroke-dasharray="62.83" stroke-dashoffset="15.71" stroke-linecap="round"/>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span class="text-2xl font-bold text-gradient">75%</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-neutral-600 mt-2">9 de 12 aulas concluídas</p>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span>Tempo assistido</span>
+                            <span class="font-medium">6h 30min</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span>Exercícios realizados</span>
+                            <span class="font-medium">18/24</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span>Nota média</span>
+                            <span class="font-medium text-success">8.5/10</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course Modules -->
+                <div class="card">
+                    <h3 class="font-semibold mb-4">Módulos do Curso</h3>
+                    <div class="space-y-3">
+                        <!-- Module 1 -->
+                        <div class="border border-neutral-200 rounded-lg">
+                            <button class="w-full p-3 text-left flex items-center justify-between hover:bg-neutral-50 rounded-lg" onclick="toggleModule('module1')">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-play-circle text-success"></i>
+                                    <span class="font-medium">Módulo 1: Números Naturais</span>
+                                </div>
+                                <i class="fas fa-chevron-down text-neutral-400" id="module1-icon"></i>
+                            </button>
+                            <div class="hidden px-6 pb-3" id="module1-content">
+                                <div class="space-y-2">
+                                    <a href="#" class="flex items-center space-x-3 p-2 hover:bg-neutral-50 rounded text-sm">
+                                        <i class="fas fa-check-circle text-success"></i>
+                                        <span>Aula 1: Introdução aos Números</span>
+                                        <span class="ml-auto text-xs text-neutral-500">15min</span>
+                                    </a>
+                                    <a href="#" class="flex items-center space-x-3 p-2 hover:bg-neutral-50 rounded text-sm">
+                                        <i class="fas fa-check-circle text-success"></i>
+                                        <span>Aula 2: Operações Básicas</span>
+                                        <span class="ml-auto text-xs text-neutral-500">20min</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Module 2 -->
+                        <div class="border border-primary-200 bg-primary-50 rounded-lg">
+                            <button class="w-full p-3 text-left flex items-center justify-between hover:bg-primary-100 rounded-lg" onclick="toggleModule('module2')">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-play-circle text-primary-600"></i>
+                                    <span class="font-medium text-primary-700">Módulo 2: Frações e Decimais</span>
+                                </div>
+                                <i class="fas fa-chevron-up text-primary-600" id="module2-icon"></i>
+                            </button>
+                            <div class="px-6 pb-3" id="module2-content">
+                                <div class="space-y-2">
+                                    <a href="#" class="flex items-center space-x-3 p-2 bg-primary-100 rounded text-sm font-medium">
+                                        <i class="fas fa-play-circle text-primary-600"></i>
+                                        <span>Aula 3: Frações e Números Decimais</span>
+                                        <span class="ml-auto text-xs text-primary-600">45min</span>
+                                    </a>
+                                    <a href="#" class="flex items-center space-x-3 p-2 hover:bg-primary-100 rounded text-sm">
+                                        <i class="fas fa-lock text-neutral-400"></i>
+                                        <span class="text-neutral-500">Aula 4: Operações com Frações</span>
+                                        <span class="ml-auto text-xs text-neutral-400">30min</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Module 3 -->
+                        <div class="border border-neutral-200 rounded-lg opacity-60">
+                            <button class="w-full p-3 text-left flex items-center justify-between cursor-not-allowed">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-lock text-neutral-400"></i>
+                                    <span class="font-medium text-neutral-500">Módulo 3: Geometria Básica</span>
+                                </div>
+                                <i class="fas fa-chevron-down text-neutral-400"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Downloads & Materials -->
+                <div class="card">
+                    <h3 class="font-semibold mb-4">
+                        <i class="fas fa-download text-primary-600 mr-2"></i>
+                        Materiais de Apoio
+                    </h3>
+                    <div class="space-y-3">
+                        <a href="#" class="flex items-center space-x-3 p-3 bg-neutral-50 hover:bg-neutral-100 rounded-lg transition-colors">
+                            <i class="fas fa-file-pdf text-error"></i>
+                            <div class="flex-1">
+                                <p class="font-medium text-sm">Apostila - Frações</p>
+                                <p class="text-xs text-neutral-500">PDF • 2.3 MB</p>
+                            </div>
+                            <i class="fas fa-download text-neutral-400"></i>
+                        </a>
+                        
+                        <a href="#" class="flex items-center space-x-3 p-3 bg-neutral-50 hover:bg-neutral-100 rounded-lg transition-colors">
+                            <i class="fas fa-file-alt text-info"></i>
+                            <div class="flex-1">
+                                <p class="font-medium text-sm">Lista de Exercícios</p>
+                                <p class="text-xs text-neutral-500">PDF • 1.8 MB</p>
+                            </div>
+                            <i class="fas fa-download text-neutral-400"></i>
+                        </a>
+                        
+                        <a href="#" class="flex items-center space-x-3 p-3 bg-neutral-50 hover:bg-neutral-100 rounded-lg transition-colors">
+                            <i class="fas fa-file-powerpoint text-warning"></i>
+                            <div class="flex-1">
+                                <p class="font-medium text-sm">Slides da Aula</p>
+                                <p class="text-xs text-neutral-500">PPTX • 4.1 MB</p>
+                            </div>
+                            <i class="fas fa-download text-neutral-400"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Course Rating -->
+                <div class="card">
+                    <h3 class="font-semibold mb-4">Avalie este Curso</h3>
+                    <div class="text-center mb-4">
+                        <div class="flex justify-center space-x-1 mb-2">
+                            <i class="fas fa-star text-yellow-400 text-xl cursor-pointer hover:text-yellow-500" onclick="setRating(1)"></i>
+                            <i class="fas fa-star text-yellow-400 text-xl cursor-pointer hover:text-yellow-500" onclick="setRating(2)"></i>
+                            <i class="fas fa-star text-yellow-400 text-xl cursor-pointer hover:text-yellow-500" onclick="setRating(3)"></i>
+                            <i class="fas fa-star text-yellow-400 text-xl cursor-pointer hover:text-yellow-500" onclick="setRating(4)"></i>
+                            <i class="fas fa-star text-neutral-300 text-xl cursor-pointer hover:text-yellow-500" onclick="setRating(5)"></i>
+                        </div>
+                        <p class="text-sm text-neutral-600">Sua avaliação: 4/5 estrelas</p>
+                    </div>
+                    
+                    <textarea 
+                        class="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none text-sm" 
+                        rows="3" 
+                        placeholder="Deixe um comentário sobre o curso (opcional)...">
+                    </textarea>
+                    
+                    <button class="btn btn-primary w-full mt-3 text-sm">
+                        <i class="fas fa-paper-plane mr-2"></i>
+                        Enviar Avaliação
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleModule(moduleId) {
+            const content = document.getElementById(moduleId + '-content');
+            const icon = document.getElementById(moduleId + '-icon');
+            
+            content.classList.toggle('hidden');
+            
+            if (content.classList.contains('hidden')) {
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            } else {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            }
+        }
+
+        function markAsComplete() {
+            // Simulate marking as complete
+            const button = event.target;
+            button.innerHTML = '<i class="fas fa-check mr-2"></i>Concluída!';
+            button.classList.remove('btn-primary');
+            button.classList.add('btn-secondary');
+            button.disabled = true;
+            
+            // Show success message
+            showNotification('Aula marcada como concluída! 🎉', 'success');
+        }
+
+        function setRating(rating) {
+            const stars = document.querySelectorAll('.fa-star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.remove('text-neutral-300');
+                    star.classList.add('text-yellow-400');
+                } else {
+                    star.classList.remove('text-yellow-400');
+                    star.classList.add('text-neutral-300');
+                }
+            });
+        }
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
+                type === 'success' ? 'bg-success text-white' : 'bg-error text-white'
+            }`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
 </body>
 
 </html>

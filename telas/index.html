@@ -4,119 +4,186 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Painel do Professor - SalinhaPro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-
-
+    <title>CursoHub - Acesso à Plataforma</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
 </head>
 
-<body class="bg-gray-100 text-gray-800">
-    <!-- Sidebar -->
-    <div class="flex min-h-screen">
-        <aside class="w-64 bg-indigo-700 text-white p-6">
-            <h1 class="text-2xl font-bold mb-8">SalinhaPro</h1>
-            <nav class="space-y-4">
-                <a href="#" class="block hover:text-indigo-200">📚 Minhas Salinhas</a>
-                <a href="#" class="block hover:text-indigo-200">➕ Nova Salinha</a>
-                <a href="#" class="block hover:text-indigo-200">⚙️ Configurações</a>
-            </nav>
-            <div class="mt-10 border-t border-indigo-500 pt-4">
-                <a href="#" class="block text-sm hover:text-indigo-300">Sair</a>
-            </div>
-        </aside>
-
-        <!-- Main -->
-        <main class="flex-1 p-8">
-            <!-- Back button -->
-            <a href="homepage.html"
-                class="inline-flex items-center mb-6 text-indigo-600 hover:text-indigo-800 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd"
-                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-                        clip-rule="evenodd" />
-                </svg>
-                Voltar para Home
-            </a>
-
-            <!-- Materiais enviados pelo professor -->
-            <section class="mt-12">
-                <h2 class="text-2xl font-bold mb-4">📂 Materiais de Aula</h2>
-
-                <!-- Botão simulado para envio de material -->
-                <div class="mb-4">
-                    <a href="#" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">+
-                        Adicionar
-                        Material</a>
-                </div>
-
-                <!-- Lista de materiais -->
-                <ul class="space-y-3">
-                    <li class="bg-white p-4 rounded shadow flex items-center justify-between">
-                        <div>
-                            <p class="font-medium">📄 Apostila Frações - Capítulo 2</p>
-                            <p class="text-sm text-gray-500">Enviado em: 20/05/2025</p>
-                        </div>
-                        <a href="#" class="text-indigo-600 hover:underline text-sm">Ver</a>
-                    </li>
-                    <li class="bg-white p-4 rounded shadow flex items-center justify-between">
-                        <div>
-                            <p class="font-medium">📎 Lista de Exercícios ENEM</p>
-                            <p class="text-sm text-gray-500">Enviado em: 19/05/2025</p>
-                        </div>
-                        <a href="#" class="text-indigo-600 hover:underline text-sm">Ver</a>
-                    </li>
-                </ul>
-            </section>
-
-
-            <h2 class="text-3xl font-bold mb-6">Minhas Salinhas</h2>
-
-
-            <!-- Botão de nova salinha -->
-            <div class="mb-6">
-                <a href="#" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">+ Criar
-                    nova salinha</a>
-            </div>
-
-            <!-- Lista de salinhas -->
-            <!-- Lista de salinhas -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white p-4 rounded shadow">
-                    <h3 class="text-xl font-semibold mb-2">ver como o aluno</h3>
-                    <p class="text-sm text-gray-600 mb-3">Vídeo aula de frações + materiais</p>
-                    <div class="flex gap-2">
-                        <a href="salinhadoaluno.html"
-                            class="bg-indigo-600 text-white px-3 py-1 rounded text-sm hover:bg-indigo-700"> Ver como
-                            aluno</a>
-                        <a href="#" class="text-indigo-600 hover:underline text-sm">Editar</a>
-                    </div>
-                </div>
-
-                <div class="bg-white p-4 rounded shadow">
-                    <h3 class="text-xl font-semibold mb-2">Redação - ENEM</h3>
-                    <p class="text-sm text-gray-600 mb-3">Aula sobre estrutura de texto dissertativo</p>
-                    <div class="flex gap-2">
-                        <a href="salinha-aluno.html"
-                            class="bg-indigo-600 text-white px-3 py-1 rounded text-sm hover:bg-indigo-700"> Ver como
-                            aluno</a>
-                        <a href="#" class="text-indigo-600 hover:underline text-sm">Editar</a>
-                    </div>
-                </div>
-
-                <div class="bg-white p-4 rounded shadow">
-                    <h3 class="text-xl font-semibold mb-2">Física - Cinemática</h3>
-                    <p class="text-sm text-gray-600 mb-3">Vídeo + exercícios com gabarito</p>
-                    <div class="flex gap-2">
-                        <a href="salinha-aluno.html"
-                            class="bg-indigo-600 text-white px-3 py-1 rounded text-sm hover:bg-indigo-700">👁 Ver como
-                            aluno</a>
-                        <a href="#" class="text-indigo-600 hover:underline text-sm">Editar</a>
-                    </div>
-                </div>
-            </div>
-
-        </main>
+<body class="min-h-screen gradient-primary flex items-center justify-center p-6">
+    <!-- Background Elements -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-20 left-10 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-20 right-10 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
+        <div class="absolute top-40 right-1/3 w-16 h-16 bg-white/10 rounded-full blur-xl"></div>
+        <div class="absolute bottom-40 left-1/4 w-20 h-20 bg-white/10 rounded-full blur-2xl"></div>
     </div>
+
+    <!-- Back to Home -->
+    <a href="../homepage.html" class="fixed top-6 left-6 z-10 bg-white/20 glass-effect text-white hover:bg-white/30 transition-all duration-300 px-4 py-2 rounded-lg text-sm font-medium">
+        <i class="fas fa-arrow-left mr-2"></i>
+        Voltar ao Início
+    </a>
+
+    <!-- Login Container -->
+    <div class="w-full max-w-md relative z-10">
+        <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white/20">
+            <!-- Logo -->
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-graduation-cap text-white text-2xl"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-gradient">CursoHub</h1>
+                <p class="text-neutral-600 mt-2">Acesse sua plataforma de cursos</p>
+            </div>
+
+            <!-- Login Form -->
+            <form class="space-y-6" onsubmit="return handleLogin(event)">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-neutral-700 mb-2">
+                        <i class="fas fa-envelope mr-2 text-primary-600"></i>
+                        Email
+                    </label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        class="w-full px-4 py-3 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-white/80"
+                        placeholder="seu@email.com"
+                        value="professor@cursohub.com"
+                    />
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-neutral-700 mb-2">
+                        <i class="fas fa-lock mr-2 text-primary-600"></i>
+                        Senha
+                    </label>
+                    <div class="relative">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            required
+                            class="w-full px-4 py-3 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-white/80 pr-12"
+                            placeholder="••••••••"
+                            value="123456"
+                        />
+                        <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-neutral-600">
+                            <i class="fas fa-eye" id="eye-icon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between text-sm">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="rounded border-neutral-300 text-primary-600 focus:ring-primary-500">
+                        <span class="ml-2 text-neutral-600">Lembrar-me</span>
+                    </label>
+                    <a href="#" class="text-primary-600 hover:text-primary-700 font-medium">
+                        Esqueceu a senha?
+                    </a>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full py-3 text-lg">
+                    <i class="fas fa-sign-in-alt mr-2"></i>
+                    Entrar na Plataforma
+                </button>
+            </form>
+
+            <!-- User Type Selection -->
+            <div class="mt-8 p-4 bg-neutral-50 rounded-lg">
+                <p class="text-sm text-neutral-600 text-center mb-4">Acesso de demonstração:</p>
+                <div class="grid grid-cols-2 gap-3">
+                    <a href="painel.html" class="btn btn-secondary text-sm py-2">
+                        <i class="fas fa-chalkboard-teacher mr-2"></i>
+                        Professor
+                    </a>
+                    <a href="salinhadoaluno.html" class="btn btn-ghost text-sm py-2">
+                        <i class="fas fa-user-graduate mr-2"></i>
+                        Aluno
+                    </a>
+                </div>
+            </div>
+
+            <!-- Register Link -->
+            <div class="mt-6 text-center">
+                <p class="text-neutral-600">
+                    Não tem uma conta?
+                    <a href="#" class="text-primary-600 hover:text-primary-700 font-medium">
+                        Cadastre-se gratuitamente
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Features Preview -->
+        <div class="mt-8 grid grid-cols-3 gap-4 text-center">
+            <div class="bg-white/20 glass-effect rounded-lg p-4">
+                <i class="fas fa-video text-white text-xl mb-2"></i>
+                <p class="text-white text-sm">Vídeos HD</p>
+            </div>
+            <div class="bg-white/20 glass-effect rounded-lg p-4">
+                <i class="fas fa-chart-line text-white text-xl mb-2"></i>
+                <p class="text-white text-sm">Analytics</p>
+            </div>
+            <div class="bg-white/20 glass-effect rounded-lg p-4">
+                <i class="fas fa-certificate text-white text-xl mb-2"></i>
+                <p class="text-white text-sm">Certificados</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            // Show loading state
+            const button = event.target.querySelector('button[type="submit"]');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Entrando...';
+            button.disabled = true;
+            
+            // Simulate login delay
+            setTimeout(() => {
+                window.location.href = 'painel.html';
+            }, 1500);
+            
+            return false;
+        }
+
+        // Add entrance animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.w-full.max-w-md');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                container.style.transition = 'all 0.6s ease-out';
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
 </body>
 
 </html>
