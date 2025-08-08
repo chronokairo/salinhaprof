@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
-from backend.utils import allowed_file
+from utils import allowed_file
 
 uploads_bp = Blueprint('uploads', __name__, url_prefix='/api')
 

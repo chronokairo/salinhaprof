@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy import desc, or_
-from backend.models import db, User, Course, Lesson
+from models import db, User, Course, Lesson
 from sqlalchemy import func
 
 courses_bp = Blueprint('courses', __name__, url_prefix='/api/courses')

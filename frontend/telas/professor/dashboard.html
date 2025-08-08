@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard • Professor</title>
   <link rel="stylesheet" href="../../styles/style.css" />
+  <script src="../../frontend-integration.js"></script>
 </head>
 <body class="bg-neutral-50">
   <div class="p-6">
@@ -13,7 +14,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-neutral-600">Total de Cursos</p>
-            <p class="text-3xl font-bold text-gradient">8</p>
+            <p class="text-3xl font-bold text-gradient" id="total-courses">-</p>
           </div>
           <div class="w-12 h-12 gradient-primary rounded-xl flex items-center justify-center">
             <i class="fas fa-book text-white"></i>
@@ -28,7 +29,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-neutral-600">Alunos Ativos</p>
-            <p class="text-3xl font-bold text-gradient">247</p>
+            <p class="text-3xl font-bold text-gradient" id="total-students">-</p>
           </div>
           <div class="w-12 h-12 gradient-secondary rounded-xl flex items-center justify-center">
             <i class="fas fa-users text-white"></i>
@@ -117,5 +118,53 @@
     </div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" defer></script>
+  <script>
+    // Dashboard Integration
+    document.addEventListener('DOMContentLoaded', async function() {
+      const api = new CursoHubAPI();
+      
+      try {
+        // Verificar se usuário está logado
+        const token = localStorage.getItem('cursohub_token');
+        if (!token) {
+          console.log('Usuário não está logado, redirecionando...');
+          window.parent.location.href = '../index.html';
+          return;
+        }
+
+        // Carregar dados do dashboard
+        await loadDashboardData(api);
+        
+      } catch (error) {
+        console.error('Erro ao carregar dashboard:', error);
+      }
+    });
+
+    async function loadDashboardData(api) {
+      try {
+        // Carregar estatísticas dos cursos
+        const coursesResponse = await api.getCourses();
+        const totalCourses = coursesResponse.courses ? coursesResponse.courses.length : 0;
+        document.getElementById('total-courses').textContent = totalCourses;
+
+        // Calcular total de alunos (soma de todos os cursos)
+        let totalStudents = 0;
+        if (coursesResponse.courses) {
+          totalStudents = coursesResponse.courses.reduce((sum, course) => {
+            return sum + (course.stats?.total_students || 0);
+          }, 0);
+        }
+        document.getElementById('total-students').textContent = totalStudents;
+
+        console.log('Dashboard carregado com sucesso');
+        
+      } catch (error) {
+        console.error('Erro ao carregar dados do dashboard:', error);
+        // Manter valores padrão em caso de erro
+        document.getElementById('total-courses').textContent = '0';
+        document.getElementById('total-students').textContent = '0';
+      }
+    }
+  </script>
 </body>
 </html>

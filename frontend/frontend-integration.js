@@ -59,8 +59,8 @@ class CursoHubAPI {
             body: JSON.stringify({ email, password })
         });
 
-        if (data.access_token) {
-            this.setToken(data.access_token);
+        if (data.token) {
+            this.setToken(data.token);
         }
 
         return data;
@@ -72,8 +72,8 @@ class CursoHubAPI {
             body: JSON.stringify(userData)
         });
 
-        if (data.access_token) {
-            this.setToken(data.access_token);
+        if (data.token) {
+            this.setToken(data.token);
         }
 
         return data;

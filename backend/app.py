@@ -6,7 +6,7 @@ from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash
 import os
 import logging
-from backend.config import config
+from config import config
 
 def create_app(config_name='default'):
     """Fábrica de aplicação Flask"""
@@ -19,7 +19,7 @@ def create_app(config_name='default'):
     logging.basicConfig(level=logging.INFO)
     
     # Extensões
-    from backend.models import db
+    from models import db
     db.init_app(app)
     
     jwt = JWTManager(app)
@@ -64,7 +64,7 @@ def create_app(config_name='default'):
     # Inicializar dados padrão
     def create_default_data():
         """Criar dados padrão da aplicação"""
-        from backend.models import User, Course, Lesson
+        from models import User, Course, Lesson
         
         with app.app_context():
             db.create_all()

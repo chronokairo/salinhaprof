@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from backend.models import db, User, Course, Lesson, StudentProgress
+from models import db, User, Course, Lesson, StudentProgress
 from datetime import datetime
 
 students_bp = Blueprint('students', __name__, url_prefix='/api/students')

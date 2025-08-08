@@ -6,6 +6,7 @@
   <title>Meus Cursos • Professor</title>
   <link rel="stylesheet" href="../../styles/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="../../frontend-integration.js"></script>
 </head>
 <body>
   <div class="p-6">
@@ -14,56 +15,136 @@
       <a class="btn btn-primary" href="./cursos_novo.html"><i class="fas fa-plus mr-2"></i>Novo Curso</a>
     </div>
 
-    <div class="grid-responsive">
-      <!-- Card 1 -->
-      <div class="card">
-        <div class="aspect-video bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg mb-4 flex items-center justify-center">
-          <button class="btn btn-sm btn-ghost"><i class="fas fa-eye mr-1"></i>Ver como Aluno</button>
-        </div>
-        <h4 class="font-semibold mb-1">Matemática Básica</h4>
-        <p class="text-sm text-neutral-600">Fundamentos da matemática para ensino médio</p>
-        <div class="flex items-center justify-between text-sm mt-3">
-          <a href="#" class="text-primary-600">89 alunos</a>
-          <span class="text-neutral-500">Publicado</span>
-        </div>
-        <div class="flex space-x-2 mt-3">
-          <a class="btn btn-secondary flex-1" href="./cursos_editar.html"><i class="fas fa-pen mr-2"></i>Editar</a>
-          <a class="btn btn-ghost flex-1" href="./analytics.html"><i class="fas fa-chart-line mr-2"></i>Stats</a>
-        </div>
-      </div>
-      <!-- Card 2 -->
-      <div class="card">
-        <div class="aspect-video bg-gradient-to-br from-secondary-400 to-secondary-600 rounded-lg mb-4 flex items-center justify-center">
-          <button class="btn btn-sm btn-ghost"><i class="fas fa-eye mr-1"></i>Ver como Aluno</button>
-        </div>
-        <h4 class="font-semibold mb-1">Física Aplicada</h4>
-        <p class="text-sm text-neutral-600">Conceitos fundamentais de física</p>
-        <div class="flex items-center justify-between text-sm mt-3">
-          <a href="#" class="text-primary-600">67 alunos</a>
-          <span class="text-neutral-500">Publicado</span>
-        </div>
-        <div class="flex space-x-2 mt-3">
-          <a class="btn btn-secondary flex-1" href="./cursos_editar.html"><i class="fas fa-pen mr-2"></i>Editar</a>
-          <a class="btn btn-ghost flex-1" href="./analytics.html"><i class="fas fa-chart-line mr-2"></i>Stats</a>
-        </div>
-      </div>
-      <!-- Card 3 -->
-      <div class="card">
-        <div class="aspect-video bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg mb-4 flex items-center justify-center">
-          <button class="btn btn-sm btn-ghost"><i class="fas fa-eye mr-1"></i>Ver como Aluno</button>
-        </div>
-        <h4 class="font-semibold mb-1">Química Orgânica</h4>
-        <p class="text-sm text-neutral-600">Estruturas e reações orgânicas</p>
-        <div class="flex items-center justify-between text-sm mt-3">
-          <a href="#" class="text-primary-600">54 alunos</a>
-          <span class="text-warning">Rascunho</span>
-        </div>
-        <div class="flex space-x-2 mt-3">
-          <a class="btn btn-secondary flex-1" href="./cursos_editar.html"><i class="fas fa-pen mr-2"></i>Editar</a>
-          <a class="btn btn-primary flex-1" href="#"><i class="fas fa-rocket mr-2"></i>Publicar</a>
-        </div>
+    <div class="grid-responsive" id="courses-container">
+      <!-- Cursos serão carregados dinamicamente aqui -->
+      <div class="text-center py-8">
+        <i class="fas fa-spinner fa-spin text-primary-600 text-2xl"></i>
+        <p class="text-neutral-500 mt-2">Carregando cursos...</p>
       </div>
     </div>
+    </div>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      const api = new CursoHubAPI();
+      
+      try {
+        // Verificar se usuário está logado
+        const token = localStorage.getItem('cursohub_token');
+        if (!token) {
+          window.parent.location.href = '../index.html';
+          return;
+        }
+
+        await loadCourses();
+        
+      } catch (error) {
+        console.error('Erro ao carregar cursos:', error);
+        showError('Erro ao carregar cursos');
+      }
+    });
+
+    async function loadCourses() {
+      const container = document.getElementById('courses-container');
+      
+      try {
+        const api = new CursoHubAPI();
+        const response = await api.getCourses();
+        const courses = response.courses || [];
+
+        if (courses.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-12 col-span-full">
+              <i class="fas fa-book text-neutral-300 text-6xl mb-4"></i>
+              <h3 class="text-xl font-semibold text-neutral-600 mb-2">Nenhum curso encontrado</h3>
+              <p class="text-neutral-500 mb-4">Comece criando seu primeiro curso!</p>
+              <a href="./cursos_novo.html" class="btn btn-primary">
+                <i class="fas fa-plus mr-2"></i>Criar Primeiro Curso
+              </a>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = courses.map(course => createCourseCard(course)).join('');
+        
+      } catch (error) {
+        container.innerHTML = `
+          <div class="text-center py-8 col-span-full">
+            <i class="fas fa-exclamation-triangle text-error text-4xl mb-4"></i>
+            <p class="text-error">Erro ao carregar cursos: ${error.message}</p>
+            <button onclick="loadCourses()" class="btn btn-secondary mt-4">Tentar Novamente</button>
+          </div>
+        `;
+      }
+    }
+
+    function createCourseCard(course) {
+      const statusColor = course.is_published ? 'text-success' : 'text-warning';
+      const statusText = course.is_published ? 'Publicado' : 'Rascunho';
+      const studentCount = course.stats?.total_students || 0;
+      
+      return `
+        <div class="card">
+          <div class="aspect-video bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg mb-4 flex items-center justify-center">
+            <button class="btn btn-sm btn-ghost" onclick="previewCourse('${course.uuid}')">
+              <i class="fas fa-eye mr-1"></i>Ver como Aluno
+            </button>
+          </div>
+          <h4 class="font-semibold mb-1">${course.title}</h4>
+          <p class="text-sm text-neutral-600">${course.description}</p>
+          <div class="flex items-center justify-between text-sm mt-3">
+            <span class="text-primary-600">${studentCount} alunos</span>
+            <span class="${statusColor}">${statusText}</span>
+          </div>
+          <div class="flex space-x-2 mt-3">
+            <button class="btn btn-secondary flex-1" onclick="editCourse('${course.uuid}')">
+              <i class="fas fa-pen mr-2"></i>Editar
+            </button>
+            ${course.is_published 
+              ? `<a class="btn btn-ghost flex-1" href="./analytics.html?course=${course.uuid}">
+                  <i class="fas fa-chart-line mr-2"></i>Stats
+                 </a>`
+              : `<button class="btn btn-primary flex-1" onclick="publishCourse('${course.uuid}')">
+                  <i class="fas fa-rocket mr-2"></i>Publicar
+                 </button>`
+            }
+          </div>
+        </div>
+      `;
+    }
+
+    function previewCourse(courseUuid) {
+      window.open(`../salinhadoaluno.html?course=${courseUuid}`, '_blank');
+    }
+
+    function editCourse(courseUuid) {
+      window.location.href = `./cursos_editar.html?course=${courseUuid}`;
+    }
+
+    async function publishCourse(courseUuid) {
+      if (!confirm('Tem certeza que deseja publicar este curso?')) return;
+      
+      try {
+        const api = new CursoHubAPI();
+        await api.publishCourse(courseUuid);
+        showSuccess('Curso publicado com sucesso!');
+        await loadCourses(); // Recarregar lista
+      } catch (error) {
+        showError('Erro ao publicar curso: ' + error.message);
+      }
+    }
+
+    function showSuccess(message) {
+      // Implementar notificação de sucesso
+      console.log('Sucesso:', message);
+    }
+
+    function showError(message) {
+      // Implementar notificação de erro
+      console.error('Erro:', message);
+    }
+  </script>
 </body>
 </html>

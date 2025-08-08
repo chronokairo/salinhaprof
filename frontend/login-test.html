@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Login - CursoHub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Teste de Login - CursoHub</h1>
+    
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="professor@cursohub.com" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" value="123456" required>
+        </div>
+        
+        <button type="submit">Fazer Login</button>
+    </form>
+    
+    <div id="result"></div>
+    
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+            
+            console.log('Tentando fazer login com:', { email, password });
+            
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                console.log('Resposta recebida:', response);
+                
+                const data = await response.json();
+                console.log('Dados da resposta:', data);
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            <h3>Login realizado com sucesso!</h3>
+                            <p><strong>Token:</strong> ${data.token}</p>
+                            <p><strong>Usuário:</strong> ${data.user.name} (${data.user.email})</p>
+                            <p><strong>Tipo:</strong> ${data.user.user_type}</p>
+                        </div>
+                    `;
+                    
+                    // Salvar token no localStorage
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h3>Erro no login:</h3>
+                            <p>${data.error || 'Erro desconhecido'}</p>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('Erro ao fazer login:', error);
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>Erro de conexão:</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        });
+        
+        // Verificar se já existe um token salvo
+        window.addEventListener('load', function() {
+            const savedToken = localStorage.getItem('token');
+            const savedUser = localStorage.getItem('user');
+            
+            if (savedToken && savedUser) {
+                const user = JSON.parse(savedUser);
+                document.getElementById('result').innerHTML = `
+                    <div class="result success">
+                        <h3>Já logado!</h3>
+                        <p><strong>Usuário:</strong> ${user.name} (${user.email})</p>
+                        <p><strong>Tipo:</strong> ${user.user_type}</p>
+                        <button onclick="logout()">Logout</button>
+                    </div>
+                `;
+            }
+        });
+        
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            document.getElementById('result').innerHTML = '';
+            console.log('Logout realizado');
+        }
+    </script>
+</body>
+</html>

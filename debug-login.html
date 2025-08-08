@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Login - CursoHub</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; }
+        .test-box { background: #f0f0f0; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        input, button { padding: 10px; margin: 5px; width: 200px; }
+        button { cursor: pointer; background: #007bff; color: white; border: none; border-radius: 4px; }
+        .log { background: #f8f9fa; border: 1px solid #dee2e6; padding: 10px; margin: 10px 0; height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>🔐 Teste de Login - CursoHub</h1>
+    
+    <div class="test-box">
+        <h3>Teste Direto da API</h3>
+        <div>
+            <input type="email" id="email" placeholder="Email" value="professor@cursohub.com">
+            <input type="password" id="password" placeholder="Senha" value="123456">
+            <button onclick="testLogin()">Testar Login</button>
+        </div>
+        <div id="result"></div>
+    </div>
+
+    <div class="test-box">
+        <h3>Status da API</h3>
+        <button onclick="testAPI()">Verificar API</button>
+        <div id="api-status"></div>
+    </div>
+
+    <div class="test-box">
+        <h3>Logs</h3>
+        <div id="logs" class="log"></div>
+        <button onclick="clearLogs()">Limpar Logs</button>
+    </div>
+
+    <script>
+        function log(message) {
+            const logsDiv = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            logsDiv.innerHTML += `[${timestamp}] ${message}\n`;
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+            console.log(message);
+        }
+
+        async function testAPI() {
+            const statusDiv = document.getElementById('api-status');
+            log('Testando conexão com API...');
+            
+            try {
+                const response = await fetch('http://localhost:5000/');
+                const data = await response.json();
+                log(`API respondeu: ${response.status}`);
+                statusDiv.innerHTML = `<div class="success">✅ API Online - Versão: ${data.version}</div>`;
+            } catch (error) {
+                log(`Erro na API: ${error.message}`);
+                statusDiv.innerHTML = `<div class="error">❌ API Offline: ${error.message}</div>`;
+            }
+        }
+
+        async function testLogin() {
+            const resultDiv = document.getElementById('result');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            log(`Iniciando teste de login para: ${email}`);
+            resultDiv.innerHTML = 'Testando login...';
+            
+            try {
+                // Teste 1: OPTIONS request (preflight)
+                log('Enviando OPTIONS request...');
+                const optionsResponse = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'OPTIONS'
+                });
+                log(`OPTIONS response: ${optionsResponse.status}`);
+                
+                // Teste 2: POST request real
+                log('Enviando POST request...');
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                log(`POST response: ${response.status}`);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    log(`Erro na resposta: ${errorText}`);
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+                
+                const data = await response.json();
+                log(`Login bem-sucedido! Token recebido: ${data.token ? 'Sim' : 'Não'}`);
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        ✅ Login bem-sucedido!<br>
+                        <strong>Usuário:</strong> ${data.user.name}<br>
+                        <strong>Email:</strong> ${data.user.email}<br>
+                        <strong>Role:</strong> ${data.user.role}<br>
+                        <strong>Token:</strong> ${data.token ? 'Recebido' : 'Não recebido'}
+                    </div>
+                `;
+                
+                // Salvar token para testes
+                if (data.token) {
+                    localStorage.setItem('cursohub_token', data.token);
+                    log('Token salvo no localStorage');
+                }
+                
+            } catch (error) {
+                log(`Erro no login: ${error.message}`);
+                resultDiv.innerHTML = `<div class="error">❌ Erro: ${error.message}</div>`;
+            }
+        }
+
+        function clearLogs() {
+            document.getElementById('logs').innerHTML = '';
+        }
+
+        // Testar API automaticamente ao carregar
+        window.addEventListener('load', () => {
+            log('Página carregada, testando API...');
+            testAPI();
+        });
+    </script>
+</body>
+</html>
