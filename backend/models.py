@@ -1,91 +1,114 @@
-from app import db
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from sqlalchemy.dialects.postgresql import UUID
 import uuid
+from werkzeug.security import generate_password_hash, check_password_hash
 
-# Tabela de associação para cursos e estudantes
-course_students = db.Table('course_students',
-    db.Column('course_id', db.Integer, db.ForeignKey('course.id'), primary_key=True),
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-    db.Column('enrolled_at', db.DateTime, default=datetime.utcnow),
-    db.Column('progress', db.Float, default=0.0),
-    db.Column('completed_at', db.DateTime, nullable=True)
+# Será inicializado no app.py
+db = SQLAlchemy()
+
+# Tabelas de relacionamento many-to-many
+course_enrollments = db.Table('course_enrollments',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    db.Column('course_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True),
+    db.Column('enrolled_at', db.DateTime, default=datetime.utcnow)
 )
 
-# Modelo de Usuário
 class User(db.Model):
+    __tablename__ = 'users'
+    
     id = db.Column(db.Integer, primary_key=True)
-    uuid = db.Column(db.String(36), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
+    uuid = db.Column(db.String(36), unique=True, default=lambda: str(uuid.uuid4()))
     name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(200), nullable=False)
-    role = db.Column(db.String(20), nullable=False, default='student')  # admin, teacher, student
-    avatar = db.Column(db.String(200), nullable=True)
-    bio = db.Column(db.Text, nullable=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(128), nullable=False)
+    role = db.Column(db.String(20), default='student')  # student, teacher, admin
+    avatar_url = db.Column(db.String(255))
+    bio = db.Column(db.Text)
+    is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    is_active = db.Column(db.Boolean, default=True)
     
     # Relacionamentos
-    created_courses = db.relationship('Course', backref='creator', lazy=True, foreign_keys='Course.creator_id')
-    enrolled_courses = db.relationship('Course', secondary=course_students, lazy='subquery',
-                                     backref=db.backref('students', lazy=True))
+    created_courses = db.relationship('Course', backref='creator', lazy=True)
+    enrolled_courses = db.relationship('Course', secondary=course_enrollments, 
+                                     backref=db.backref('students', lazy='dynamic'))
     comments = db.relationship('Comment', backref='author', lazy=True)
-    ratings = db.relationship('Rating', backref='author', lazy=True)
+    ratings = db.relationship('Rating', backref='user', lazy=True)
+    progress = db.relationship('StudentProgress', backref='student', lazy=True)
     
-    def to_dict(self):
-        return {
-            'id': self.id,
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+    
+    def to_dict(self, include_email=False):
+        data = {
             'uuid': self.uuid,
             'name': self.name,
-            'email': self.email,
             'role': self.role,
-            'avatar': self.avatar,
+            'avatar_url': self.avatar_url,
             'bio': self.bio,
-            'created_at': self.created_at.isoformat(),
-            'is_active': self.is_active
+            'created_at': self.created_at.isoformat() if self.created_at else None
         }
+        if include_email:
+            data['email'] = self.email
+        return data
 
-# Modelo de Curso
 class Course(db.Model):
+    __tablename__ = 'courses'
+    
     id = db.Column(db.Integer, primary_key=True)
-    uuid = db.Column(db.String(36), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
+    uuid = db.Column(db.String(36), unique=True, default=lambda: str(uuid.uuid4()))
     title = db.Column(db.String(200), nullable=False)
-    description = db.Column(db.Text, nullable=True)
-    thumbnail = db.Column(db.String(200), nullable=True)
-    category = db.Column(db.String(50), nullable=True)
-    level = db.Column(db.String(20), nullable=False, default='beginner')  # beginner, intermediate, advanced
+    description = db.Column(db.Text)
+    category = db.Column(db.String(50))
+    level = db.Column(db.String(20), default='beginner')  # beginner, intermediate, advanced
     price = db.Column(db.Float, default=0.0)
-    duration_hours = db.Column(db.Integer, default=0)
-    creator_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    published_at = db.Column(db.DateTime, nullable=True)
+    thumbnail_url = db.Column(db.String(255))
     is_published = db.Column(db.Boolean, default=False)
     is_featured = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    published_at = db.Column(db.DateTime)
+    
+    # Chave estrangeira
+    creator_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     
     # Relacionamentos
-    lessons = db.relationship('Lesson', backref='course', lazy=True, cascade='all, delete-orphan')
-    materials = db.relationship('Material', backref='course', lazy=True, cascade='all, delete-orphan')
-    comments = db.relationship('Comment', backref='course', lazy=True, cascade='all, delete-orphan')
-    ratings = db.relationship('Rating', backref='course', lazy=True, cascade='all, delete-orphan')
+    lessons = db.relationship('Lesson', backref='course', lazy=True, 
+                            cascade='all, delete-orphan', order_by='Lesson.order_index')
+    comments = db.relationship('Comment', backref='course', lazy=True)
+    ratings = db.relationship('Rating', backref='course', lazy=True)
+    
+    def get_average_rating(self):
+        if not self.ratings:
+            return 0
+        return sum(rating.value for rating in self.ratings) / len(self.ratings)
+    
+    def get_total_duration(self):
+        return sum(lesson.video_duration for lesson in self.lessons if lesson.video_duration)
+    
+    def get_lesson_count(self):
+        return len(self.lessons)
+    
+    def get_student_count(self):
+        return self.students.count()
     
     def to_dict(self, include_lessons=False, include_stats=False):
         data = {
-            'id': self.id,
             'uuid': self.uuid,
             'title': self.title,
             'description': self.description,
-            'thumbnail': self.thumbnail,
             'category': self.category,
             'level': self.level,
             'price': self.price,
-            'duration_hours': self.duration_hours,
-            'creator': self.creator.to_dict() if self.creator else None,
-            'created_at': self.created_at.isoformat(),
-            'published_at': self.published_at.isoformat() if self.published_at else None,
+            'thumbnail_url': self.thumbnail_url,
             'is_published': self.is_published,
-            'is_featured': self.is_featured
+            'is_featured': self.is_featured,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'published_at': self.published_at.isoformat() if self.published_at else None,
+            'creator': self.creator.to_dict() if self.creator else None
         }
         
         if include_lessons:
@@ -93,41 +116,37 @@ class Course(db.Model):
         
         if include_stats:
             data['stats'] = {
-                'total_students': len(self.students),
-                'total_lessons': len(self.lessons),
-                'avg_rating': self.get_average_rating(),
-                'total_ratings': len(self.ratings)
+                'average_rating': round(self.get_average_rating(), 1),
+                'total_duration': self.get_total_duration(),
+                'lesson_count': self.get_lesson_count(),
+                'student_count': self.get_student_count()
             }
         
         return data
-    
-    def get_average_rating(self):
-        if not self.ratings:
-            return 0
-        return sum(rating.rating for rating in self.ratings) / len(self.ratings)
 
-# Modelo de Aula/Lição
 class Lesson(db.Model):
+    __tablename__ = 'lessons'
+    
     id = db.Column(db.Integer, primary_key=True)
-    uuid = db.Column(db.String(36), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
+    uuid = db.Column(db.String(36), unique=True, default=lambda: str(uuid.uuid4()))
     title = db.Column(db.String(200), nullable=False)
-    description = db.Column(db.Text, nullable=True)
-    content = db.Column(db.Text, nullable=True)  # Conteúdo texto da aula
-    video_url = db.Column(db.String(500), nullable=True)
+    description = db.Column(db.Text)
+    content = db.Column(db.Text)
+    video_url = db.Column(db.String(255))
     video_duration = db.Column(db.Integer, default=0)  # em segundos
-    order_index = db.Column(db.Integer, nullable=False, default=0)
-    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
+    order_index = db.Column(db.Integer, default=0)
+    is_free = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    is_free = db.Column(db.Boolean, default=False)
+    
+    # Chave estrangeira
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
     
     # Relacionamentos
-    materials = db.relationship('Material', backref='lesson', lazy=True, cascade='all, delete-orphan')
-    exercises = db.relationship('Exercise', backref='lesson', lazy=True, cascade='all, delete-orphan')
+    progress = db.relationship('StudentProgress', backref='lesson', lazy=True)
     
     def to_dict(self):
         return {
-            'id': self.id,
             'uuid': self.uuid,
             'title': self.title,
             'description': self.description,
@@ -135,151 +154,109 @@ class Lesson(db.Model):
             'video_url': self.video_url,
             'video_duration': self.video_duration,
             'order_index': self.order_index,
-            'created_at': self.created_at.isoformat(),
             'is_free': self.is_free,
-            'materials': [material.to_dict() for material in self.materials],
-            'exercises': [exercise.to_dict() for exercise in self.exercises]
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'course_uuid': self.course.uuid if self.course else None
         }
 
-# Modelo de Material
-class Material(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    uuid = db.Column(db.String(36), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
-    title = db.Column(db.String(200), nullable=False)
-    description = db.Column(db.Text, nullable=True)
-    file_path = db.Column(db.String(500), nullable=False)
-    file_type = db.Column(db.String(50), nullable=False)  # pdf, doc, video, image, etc
-    file_size = db.Column(db.Integer, default=0)  # em bytes
-    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=True)
-    lesson_id = db.Column(db.Integer, db.ForeignKey('lesson.id'), nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'uuid': self.uuid,
-            'title': self.title,
-            'description': self.description,
-            'file_path': self.file_path,
-            'file_type': self.file_type,
-            'file_size': self.file_size,
-            'created_at': self.created_at.isoformat()
-        }
-
-# Modelo de Exercício
-class Exercise(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    uuid = db.Column(db.String(36), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
-    question = db.Column(db.Text, nullable=False)
-    options = db.Column(db.JSON, nullable=True)  # Para questões de múltipla escolha
-    correct_answer = db.Column(db.Text, nullable=False)
-    explanation = db.Column(db.Text, nullable=True)
-    lesson_id = db.Column(db.Integer, db.ForeignKey('lesson.id'), nullable=False)
-    order_index = db.Column(db.Integer, nullable=False, default=0)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
-    def to_dict(self, include_answer=False):
-        data = {
-            'id': self.id,
-            'uuid': self.uuid,
-            'question': self.question,
-            'options': self.options,
-            'explanation': self.explanation,
-            'order_index': self.order_index,
-            'created_at': self.created_at.isoformat()
-        }
-        
-        if include_answer:
-            data['correct_answer'] = self.correct_answer
-        
-        return data
-
-# Modelo de Comentário
 class Comment(db.Model):
+    __tablename__ = 'comments'
+    
     id = db.Column(db.Integer, primary_key=True)
-    uuid = db.Column(db.String(36), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
+    uuid = db.Column(db.String(36), unique=True, default=lambda: str(uuid.uuid4()))
     content = db.Column(db.Text, nullable=False)
-    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
-    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    parent_id = db.Column(db.Integer, db.ForeignKey('comment.id'), nullable=True)  # Para respostas
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-    # Relacionamento para respostas
-    replies = db.relationship('Comment', backref=db.backref('parent', remote_side=[id]), lazy=True)
+    # Chaves estrangeiras
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+    parent_id = db.Column(db.Integer, db.ForeignKey('comments.id'))  # Para respostas
     
-    def to_dict(self):
-        return {
-            'id': self.id,
+    # Relacionamentos
+    replies = db.relationship('Comment', backref=db.backref('parent', remote_side=[id]))
+    
+    def to_dict(self, include_replies=True):
+        data = {
             'uuid': self.uuid,
             'content': self.content,
-            'author': self.author.to_dict(),
-            'parent_id': self.parent_id,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat(),
-            'replies': [reply.to_dict() for reply in self.replies]
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'author': self.author.to_dict() if self.author else None,
+            'parent_id': self.parent.uuid if self.parent else None
         }
+        
+        if include_replies:
+            data['replies'] = [reply.to_dict(include_replies=False) for reply in self.replies]
+        
+        return data
 
-# Modelo de Avaliação
 class Rating(db.Model):
+    __tablename__ = 'ratings'
+    
     id = db.Column(db.Integer, primary_key=True)
-    rating = db.Column(db.Integer, nullable=False)  # 1-5 estrelas
-    comment = db.Column(db.Text, nullable=True)
-    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
-    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    value = db.Column(db.Integer, nullable=False)  # 1-5 estrelas
+    comment = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
-    # Constraint para evitar múltiplas avaliações do mesmo usuário no mesmo curso
-    __table_args__ = (db.UniqueConstraint('course_id', 'author_id', name='unique_user_course_rating'),)
+    # Chaves estrangeiras
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+    
+    # Índice único para evitar múltiplas avaliações do mesmo usuário para o mesmo curso
+    __table_args__ = (db.UniqueConstraint('user_id', 'course_id', name='unique_user_course_rating'),)
     
     def to_dict(self):
         return {
-            'id': self.id,
-            'rating': self.rating,
+            'value': self.value,
             'comment': self.comment,
-            'author': self.author.to_dict(),
-            'created_at': self.created_at.isoformat()
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'user': self.user.to_dict() if self.user else None
         }
 
-# Modelo de Progresso do Estudante
 class StudentProgress(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    lesson_id = db.Column(db.Integer, db.ForeignKey('lesson.id'), nullable=False)
-    completed = db.Column(db.Boolean, default=False)
-    completion_date = db.Column(db.DateTime, nullable=True)
-    watch_time = db.Column(db.Integer, default=0)  # tempo assistido em segundos
+    __tablename__ = 'student_progress'
     
-    # Constraint para evitar duplicatas
+    id = db.Column(db.Integer, primary_key=True)
+    is_completed = db.Column(db.Boolean, default=False)
+    watch_time = db.Column(db.Integer, default=0)  # tempo assistido em segundos
+    completed_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Chaves estrangeiras
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    lesson_id = db.Column(db.Integer, db.ForeignKey('lessons.id'), nullable=False)
+    
+    # Índice único
     __table_args__ = (db.UniqueConstraint('user_id', 'lesson_id', name='unique_user_lesson_progress'),)
     
     def to_dict(self):
         return {
-            'id': self.id,
-            'user_id': self.user_id,
-            'lesson_id': self.lesson_id,
-            'completed': self.completed,
-            'completion_date': self.completion_date.isoformat() if self.completion_date else None,
-            'watch_time': self.watch_time
+            'is_completed': self.is_completed,
+            'watch_time': self.watch_time,
+            'completed_at': self.completed_at.isoformat() if self.completed_at else None,
+            'lesson_uuid': self.lesson.uuid if self.lesson else None
         }
 
-# Modelo de Analytics/Estatísticas
 class Analytics(db.Model):
+    __tablename__ = 'analytics'
+    
     id = db.Column(db.Integer, primary_key=True)
-    event_type = db.Column(db.String(50), nullable=False)  # view, enrollment, completion, etc
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
-    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=True)
-    lesson_id = db.Column(db.Integer, db.ForeignKey('lesson.id'), nullable=True)
-    metadata = db.Column(db.JSON, nullable=True)  # dados adicionais do evento
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    event_type = db.Column(db.String(50), nullable=False)
+    event_data = db.Column(db.JSON)  # Renomeado de metadata para event_data
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Chaves estrangeiras opcionais
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+    lesson_id = db.Column(db.Integer, db.ForeignKey('lessons.id'))
     
     def to_dict(self):
         return {
-            'id': self.id,
             'event_type': self.event_type,
+            'event_data': self.event_data,  # Renomeado de metadata para event_data
+            'created_at': self.created_at.isoformat() if self.created_at else None,
             'user_id': self.user_id,
             'course_id': self.course_id,
-            'lesson_id': self.lesson_id,
-            'metadata': self.metadata,
-            'timestamp': self.timestamp.isoformat()
+            'lesson_id': self.lesson_id
         }

@@ -1,12 +1,15 @@
-from flask import request, jsonify, send_file
+from flask import request, jsonify, send_file, current_app as app
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from sqlalchemy import func, desc
-from app import app, db
-from models import *
+from sqlalchemy import func, desc, or_
 import os
 from datetime import datetime
+
+# Importações que serão disponíveis após app.py executar
+def get_db_and_models():
+    from backend.models import db, User, Course, Lesson, Comment, Rating, StudentProgress, Analytics, course_enrollments
+    return db, User, Course, Lesson, Comment, Rating, StudentProgress, Analytics, course_enrollments
 
 # Utilitários
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp4', 'mov', 'avi', 'doc', 'docx', 'ppt', 'pptx'}
@@ -16,15 +19,18 @@ def allowed_file(filename):
 
 def log_analytics(event_type, user_id=None, course_id=None, lesson_id=None, metadata=None):
     """Log analytics events"""
-    analytics = Analytics(
-        event_type=event_type,
-        user_id=user_id,
-        course_id=course_id,
-        lesson_id=lesson_id,
-        metadata=metadata
-    )
-    db.session.add(analytics)
-    db.session.commit()
+    try:
+        analytics = Analytics(
+            event_type=event_type,
+            user_id=user_id,
+            course_id=course_id,
+            lesson_id=lesson_id,
+            metadata=metadata
+        )
+        db.session.add(analytics)
+        db.session.commit()
+    except Exception as e:
+        app.logger.error(f"Erro ao registrar analytics: {str(e)}")
 
 # ==================== AUTENTICAÇÃO ====================
 
@@ -34,10 +40,14 @@ def register():
         data = request.get_json()
         
         # Validações
-        if not data.get('name') or not data.get('email') or not data.get('password'):
-            return jsonify({'error': 'Nome, email e senha são obrigatórios'}), 400
+        if not data.get('name'):
+            return jsonify({'error': 'Nome é obrigatório'}), 400
+        if not data.get('email'):
+            return jsonify({'error': 'Email é obrigatório'}), 400
+        if not data.get('password'):
+            return jsonify({'error': 'Senha é obrigatória'}), 400
         
-        # Verificar se email já existe
+        # Verificar se o email já existe
         if User.query.filter_by(email=data['email']).first():
             return jsonify({'error': 'Email já cadastrado'}), 409
         
@@ -53,16 +63,16 @@ def register():
         db.session.add(user)
         db.session.commit()
         
-        # Gerar token
-        access_token = create_access_token(identity=user.uuid)
+        # Criar token JWT
+        token = create_access_token(identity=user.uuid)
         
         # Log analytics
         log_analytics('user_registered', user_id=user.id)
         
         return jsonify({
             'message': 'Usuário criado com sucesso',
-            'access_token': access_token,
-            'user': user.to_dict()
+            'token': token,
+            'user': user.to_dict(include_email=True)
         }), 201
         
     except Exception as e:
@@ -78,21 +88,22 @@ def login():
         
         user = User.query.filter_by(email=data['email']).first()
         
-        if not user or not check_password_hash(user.password, data['password']):
+        if not user or not user.check_password(data['password']):
             return jsonify({'error': 'Credenciais inválidas'}), 401
         
         if not user.is_active:
             return jsonify({'error': 'Conta desativada'}), 401
         
-        access_token = create_access_token(identity=user.uuid)
+        # Criar token JWT
+        token = create_access_token(identity=user.uuid)
         
         # Log analytics
         log_analytics('user_login', user_id=user.id)
         
         return jsonify({
             'message': 'Login realizado com sucesso',
-            'access_token': access_token,
-            'user': user.to_dict()
+            'token': token,
+            'user': user.to_dict(include_email=True)
         }), 200
         
     except Exception as e:
@@ -108,7 +119,7 @@ def get_profile():
         if not user:
             return jsonify({'error': 'Usuário não encontrado'}), 404
         
-        return jsonify({'user': user.to_dict()}), 200
+        return jsonify({'user': user.to_dict(include_email=True)}), 200
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -125,20 +136,20 @@ def update_profile():
         
         data = request.get_json()
         
-        # Atualizar campos permitidos
+        # Atualizar campos
         if 'name' in data:
             user.name = data['name']
         if 'bio' in data:
             user.bio = data['bio']
-        if 'avatar' in data:
-            user.avatar = data['avatar']
+        if 'avatar_url' in data:
+            user.avatar_url = data['avatar_url']
         
         user.updated_at = datetime.utcnow()
         db.session.commit()
         
         return jsonify({
             'message': 'Perfil atualizado com sucesso',
-            'user': user.to_dict()
+            'user': user.to_dict(include_email=True)
         }), 200
         
     except Exception as e:
@@ -151,11 +162,12 @@ def get_courses():
     try:
         # Parâmetros de query
         page = request.args.get('page', 1, type=int)
-        per_page = request.args.get('per_page', 10, type=int)
+        per_page = min(request.args.get('per_page', 10, type=int), 50)  # máximo 50 por página
         category = request.args.get('category')
         level = request.args.get('level')
         search = request.args.get('search')
         featured = request.args.get('featured', type=bool)
+        creator_uuid = request.args.get('creator')
         
         # Query base
         query = Course.query.filter_by(is_published=True)
@@ -166,18 +178,46 @@ def get_courses():
         if level:
             query = query.filter_by(level=level)
         if search:
-            query = query.filter(Course.title.contains(search) | Course.description.contains(search))
+            query = query.filter(
+                or_(
+                    Course.title.contains(search),
+                    Course.description.contains(search)
+                )
+            )
         if featured:
             query = query.filter_by(is_featured=True)
+        if creator_uuid:
+            creator = User.query.filter_by(uuid=creator_uuid).first()
+            if creator:
+                query = query.filter_by(creator_id=creator.id)
         
         # Ordenação
-        query = query.order_by(desc(Course.created_at))
+        sort_by = request.args.get('sort', 'recent')
+        if sort_by == 'popular':
+            # Ordenar por número de estudantes
+            query = query.outerjoin(course_enrollments).group_by(Course.id).order_by(
+                desc(func.count(course_enrollments.c.user_id))
+            )
+        elif sort_by == 'rating':
+            # Ordenar por avaliação média
+            query = query.outerjoin(Rating).group_by(Course.id).order_by(
+                desc(func.avg(Rating.value))
+            )
+        else:  # recent (padrão)
+            query = query.order_by(desc(Course.created_at))
         
         # Paginação
-        courses = query.paginate(page=page, per_page=per_page, error_out=False)
+        courses = query.paginate(
+            page=page, 
+            per_page=per_page, 
+            error_out=False
+        )
         
         # Log analytics
-        log_analytics('courses_viewed', metadata={'page': page, 'filters': request.args.to_dict()})
+        log_analytics('courses_viewed', metadata={
+            'page': page, 
+            'filters': request.args.to_dict()
+        })
         
         return jsonify({
             'courses': [course.to_dict(include_stats=True) for course in courses.items],
@@ -192,6 +232,7 @@ def get_courses():
         }), 200
         
     except Exception as e:
+        app.logger.error(f"Erro ao buscar cursos: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/courses/<course_uuid>', methods=['GET'])
@@ -284,8 +325,8 @@ def update_course(course_uuid):
             course.level = data['level']
         if 'price' in data:
             course.price = data['price']
-        if 'thumbnail' in data:
-            course.thumbnail = data['thumbnail']
+        if 'thumbnail_url' in data:
+            course.thumbnail_url = data['thumbnail_url']
         
         course.updated_at = datetime.utcnow()
         db.session.commit()
@@ -362,11 +403,12 @@ def enroll_course(course_uuid):
 @app.route('/api/courses/<course_uuid>/lessons', methods=['GET'])
 def get_lessons(course_uuid):
     try:
-        course = Course.query.filter_by(uuid=course_uuid, is_published=True).first()
+        course = Course.query.filter_by(uuid=course_uuid).first()
         
         if not course:
             return jsonify({'error': 'Curso não encontrado'}), 404
         
+        # Ordenar por order_index
         lessons = Lesson.query.filter_by(course_id=course.id).order_by(Lesson.order_index).all()
         
         return jsonify({
@@ -452,6 +494,88 @@ def get_lesson(lesson_uuid):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# ==================== PROGRESSO ====================
+
+@app.route('/api/lessons/<lesson_uuid>/complete', methods=['POST'])
+@jwt_required()
+def complete_lesson(lesson_uuid):
+    try:
+        user_uuid = get_jwt_identity()
+        user = User.query.filter_by(uuid=user_uuid).first()
+        
+        lesson = Lesson.query.filter_by(uuid=lesson_uuid).first()
+        
+        if not lesson:
+            return jsonify({'error': 'Aula não encontrada'}), 404
+        
+        # Buscar ou criar progresso
+        progress = StudentProgress.query.filter_by(
+            user_id=user.id, 
+            lesson_id=lesson.id
+        ).first()
+        
+        if not progress:
+            progress = StudentProgress(
+                user_id=user.id,
+                lesson_id=lesson.id
+            )
+            db.session.add(progress)
+        
+        data = request.get_json() or {}
+        
+        progress.is_completed = True
+        progress.completed_at = datetime.utcnow()
+        progress.watch_time = data.get('watch_time', progress.watch_time)
+        progress.updated_at = datetime.utcnow()
+        
+        db.session.commit()
+        
+        # Log analytics
+        log_analytics('lesson_completed', user_id=user.id, 
+                     course_id=lesson.course_id, lesson_id=lesson.id)
+        
+        return jsonify({
+            'message': 'Aula marcada como concluída',
+            'progress': progress.to_dict()
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/courses/<course_uuid>/progress', methods=['GET'])
+@jwt_required()
+def get_course_progress(course_uuid):
+    try:
+        user_uuid = get_jwt_identity()
+        user = User.query.filter_by(uuid=user_uuid).first()
+        
+        course = Course.query.filter_by(uuid=course_uuid).first()
+        
+        if not course:
+            return jsonify({'error': 'Curso não encontrado'}), 404
+        
+        # Buscar progresso de todas as aulas do curso
+        lesson_ids = [lesson.id for lesson in course.lessons]
+        progress_records = StudentProgress.query.filter(
+            StudentProgress.user_id == user.id,
+            StudentProgress.lesson_id.in_(lesson_ids)
+        ).all()
+        
+        total_lessons = len(course.lessons)
+        completed_lessons = sum(1 for p in progress_records if p.is_completed)
+        progress_percentage = (completed_lessons / total_lessons * 100) if total_lessons > 0 else 0
+        
+        return jsonify({
+            'course_uuid': course_uuid,
+            'total_lessons': total_lessons,
+            'completed_lessons': completed_lessons,
+            'progress_percentage': round(progress_percentage, 1),
+            'lesson_progress': [p.to_dict() for p in progress_records]
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 # ==================== COMENTÁRIOS ====================
 
 @app.route('/api/courses/<course_uuid>/comments', methods=['GET'])
@@ -462,7 +586,11 @@ def get_comments(course_uuid):
         if not course:
             return jsonify({'error': 'Curso não encontrado'}), 404
         
-        comments = Comment.query.filter_by(course_id=course.id, parent_id=None).order_by(desc(Comment.created_at)).all()
+        # Buscar comentários principais (sem parent_id)
+        comments = Comment.query.filter_by(
+            course_id=course.id, 
+            parent_id=None
+        ).order_by(desc(Comment.created_at)).all()
         
         return jsonify({
             'comments': [comment.to_dict() for comment in comments]
@@ -490,20 +618,22 @@ def create_comment(course_uuid):
         
         comment = Comment(
             content=data['content'],
-            course_id=course.id,
-            author_id=user.id,
-            parent_id=data.get('parent_id')
+            user_id=user.id,
+            course_id=course.id
         )
+        
+        # Se é uma resposta a outro comentário
+        if data.get('parent_uuid'):
+            parent = Comment.query.filter_by(uuid=data['parent_uuid']).first()
+            if parent:
+                comment.parent_id = parent.id
         
         db.session.add(comment)
         db.session.commit()
         
-        # Log analytics
-        log_analytics('comment_created', user_id=user.id, course_id=course.id)
-        
         return jsonify({
             'message': 'Comentário criado com sucesso',
-            'comment': comment.to_dict()
+            'comment': comment.to_dict(include_replies=False)
         }), 201
         
     except Exception as e:
@@ -525,112 +655,32 @@ def rate_course(course_uuid):
         
         data = request.get_json()
         
-        if not data.get('rating') or not 1 <= int(data['rating']) <= 5:
-            return jsonify({'error': 'Avaliação deve ser entre 1 e 5'}), 400
+        if not data.get('value') or data['value'] not in [1, 2, 3, 4, 5]:
+            return jsonify({'error': 'Avaliação deve ser entre 1 e 5 estrelas'}), 400
         
         # Verificar se já avaliou
-        existing_rating = Rating.query.filter_by(course_id=course.id, author_id=user.id).first()
+        existing_rating = Rating.query.filter_by(
+            user_id=user.id, 
+            course_id=course.id
+        ).first()
         
         if existing_rating:
             # Atualizar avaliação existente
-            existing_rating.rating = data['rating']
+            existing_rating.value = data['value']
             existing_rating.comment = data.get('comment', '')
         else:
             # Criar nova avaliação
             rating = Rating(
-                rating=data['rating'],
+                value=data['value'],
                 comment=data.get('comment', ''),
-                course_id=course.id,
-                author_id=user.id
+                user_id=user.id,
+                course_id=course.id
             )
             db.session.add(rating)
         
         db.session.commit()
         
-        # Log analytics
-        log_analytics('course_rated', user_id=user.id, course_id=course.id, metadata={'rating': data['rating']})
-        
-        return jsonify({'message': 'Avaliação registrada com sucesso'}), 200
-        
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-# ==================== PROGRESSO ====================
-
-@app.route('/api/lessons/<lesson_uuid>/complete', methods=['POST'])
-@jwt_required()
-def complete_lesson(lesson_uuid):
-    try:
-        user_uuid = get_jwt_identity()
-        user = User.query.filter_by(uuid=user_uuid).first()
-        
-        lesson = Lesson.query.filter_by(uuid=lesson_uuid).first()
-        
-        if not lesson:
-            return jsonify({'error': 'Aula não encontrada'}), 404
-        
-        # Verificar ou criar progresso
-        progress = StudentProgress.query.filter_by(user_id=user.id, lesson_id=lesson.id).first()
-        
-        if not progress:
-            progress = StudentProgress(user_id=user.id, lesson_id=lesson.id)
-            db.session.add(progress)
-        
-        progress.completed = True
-        progress.completion_date = datetime.utcnow()
-        
-        db.session.commit()
-        
-        # Log analytics
-        log_analytics('lesson_completed', user_id=user.id, course_id=lesson.course_id, lesson_id=lesson.id)
-        
-        return jsonify({'message': 'Aula marcada como concluída'}), 200
-        
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/courses/<course_uuid>/progress', methods=['GET'])
-@jwt_required()
-def get_course_progress(course_uuid):
-    try:
-        user_uuid = get_jwt_identity()
-        user = User.query.filter_by(uuid=user_uuid).first()
-        
-        course = Course.query.filter_by(uuid=course_uuid).first()
-        
-        if not course:
-            return jsonify({'error': 'Curso não encontrado'}), 404
-        
-        # Buscar progresso do usuário
-        progress_query = db.session.query(StudentProgress, Lesson).join(
-            Lesson, StudentProgress.lesson_id == Lesson.id
-        ).filter(
-            Lesson.course_id == course.id,
-            StudentProgress.user_id == user.id
-        )
-        
-        progress_data = []
-        total_lessons = len(course.lessons)
-        completed_lessons = 0
-        
-        for progress, lesson in progress_query:
-            progress_data.append({
-                'lesson': lesson.to_dict(),
-                'progress': progress.to_dict()
-            })
-            if progress.completed:
-                completed_lessons += 1
-        
-        progress_percentage = (completed_lessons / total_lessons * 100) if total_lessons > 0 else 0
-        
-        return jsonify({
-            'course_progress': {
-                'total_lessons': total_lessons,
-                'completed_lessons': completed_lessons,
-                'progress_percentage': round(progress_percentage, 2),
-                'lessons': progress_data
-            }
-        }), 200
+        return jsonify({'message': 'Avaliação salva com sucesso'}), 200
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -639,7 +689,7 @@ def get_course_progress(course_uuid):
 
 @app.route('/api/analytics/dashboard', methods=['GET'])
 @jwt_required()
-def get_analytics_dashboard():
+def analytics_dashboard():
     try:
         user_uuid = get_jwt_identity()
         user = User.query.filter_by(uuid=user_uuid).first()
@@ -647,40 +697,40 @@ def get_analytics_dashboard():
         if user.role not in ['teacher', 'admin']:
             return jsonify({'error': 'Sem permissão para acessar analytics'}), 403
         
-        # Estatísticas dos cursos do professor
-        if user.role == 'teacher':
-            courses = Course.query.filter_by(creator_id=user.id).all()
-        else:
+        # Buscar cursos do professor ou todos se admin
+        if user.role == 'admin':
             courses = Course.query.all()
+        else:
+            courses = Course.query.filter_by(creator_id=user.id).all()
         
-        course_ids = [course.id for course in courses]
+        course_ids = [c.id for c in courses]
         
-        # Estatísticas gerais
-        total_courses = len(courses)
-        total_students = db.session.query(course_students).filter(
-            course_students.c.course_id.in_(course_ids)
-        ).count() if course_ids else 0
+        # Estatísticas básicas
+        total_students = db.session.query(course_enrollments).filter(
+            course_enrollments.c.course_id.in_(course_ids)
+        ).count()
         
-        # Cursos mais populares
-        popular_courses = db.session.query(
-            Course,
-            func.count(course_students.c.user_id).label('student_count')
-        ).outerjoin(course_students).filter(
-            Course.id.in_(course_ids) if course_ids else False
-        ).group_by(Course.id).order_by(desc('student_count')).limit(5).all()
+        total_lessons = Lesson.query.filter(
+            Lesson.course_id.in_(course_ids)
+        ).count()
+        
+        total_ratings = Rating.query.filter(
+            Rating.course_id.in_(course_ids)
+        ).count()
+        
+        avg_rating = db.session.query(func.avg(Rating.value)).filter(
+            Rating.course_id.in_(course_ids)
+        ).scalar() or 0
         
         return jsonify({
-            'analytics': {
-                'total_courses': total_courses,
+            'summary': {
+                'total_courses': len(courses),
                 'total_students': total_students,
-                'published_courses': len([c for c in courses if c.is_published]),
-                'popular_courses': [
-                    {
-                        'course': course.to_dict(),
-                        'student_count': count
-                    } for course, count in popular_courses
-                ]
-            }
+                'total_lessons': total_lessons,
+                'total_ratings': total_ratings,
+                'average_rating': round(float(avg_rating), 1)
+            },
+            'courses': [course.to_dict(include_stats=True) for course in courses]
         }), 200
         
     except Exception as e:
@@ -692,13 +742,11 @@ def get_analytics_dashboard():
 @jwt_required()
 def upload_file():
     try:
-        user_uuid = get_jwt_identity()
-        user = User.query.filter_by(uuid=user_uuid).first()
-        
         if 'file' not in request.files:
             return jsonify({'error': 'Nenhum arquivo enviado'}), 400
         
         file = request.files['file']
+        file_type = request.form.get('type', 'material')  # material, video, avatar
         
         if file.filename == '':
             return jsonify({'error': 'Nenhum arquivo selecionado'}), 400
@@ -706,19 +754,25 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             # Adicionar timestamp para evitar conflitos
-            filename = f"{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}_{filename}"
+            name, ext = os.path.splitext(filename)
+            filename = f"{name}_{int(datetime.now().timestamp())}{ext}"
             
-            # Determinar pasta de destino
-            file_type = request.form.get('type', 'materials')
-            upload_path = os.path.join(app.config['UPLOAD_FOLDER'], file_type)
-            os.makedirs(upload_path, exist_ok=True)
+            # Determinar subdiretório baseado no tipo
+            subdir = {
+                'video': 'videos',
+                'avatar': 'avatars',
+                'material': 'materials'
+            }.get(file_type, 'materials')
             
-            filepath = os.path.join(upload_path, filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], subdir, filename)
             file.save(filepath)
+            
+            # URL relativa para o arquivo
+            file_url = f"/uploads/{subdir}/{filename}"
             
             return jsonify({
                 'message': 'Arquivo enviado com sucesso',
-                'file_path': f"/uploads/{file_type}/{filename}",
+                'file_url': file_url,
                 'filename': filename
             }), 200
         
@@ -727,43 +781,14 @@ def upload_file():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# ==================== ROTAS DE TESTE ====================
+# ==================== SERVIR ARQUIVOS ESTÁTICOS ====================
 
-@app.route('/api/health', methods=['GET'])
-def health_check():
-    return jsonify({
-        'status': 'healthy',
-        'message': 'CursoHub API is running',
-        'timestamp': datetime.utcnow().isoformat()
-    }), 200
-
-@app.route('/api/stats', methods=['GET'])
-def get_stats():
+@app.route('/uploads/<path:filename>')
+def uploaded_file(filename):
     try:
-        stats = {
-            'total_users': User.query.count(),
-            'total_courses': Course.query.count(),
-            'published_courses': Course.query.filter_by(is_published=True).count(),
-            'total_lessons': Lesson.query.count(),
-            'total_comments': Comment.query.count(),
-            'total_ratings': Rating.query.count()
-        }
-        
-        return jsonify({'stats': stats}), 200
-        
+        return send_file(
+            os.path.join(app.config['UPLOAD_FOLDER'], filename),
+            as_attachment=False
+        )
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-# ==================== HANDLERS DE ERRO ====================
-
-@app.errorhandler(404)
-def not_found(error):
-    return jsonify({'error': 'Endpoint não encontrado'}), 404
-
-@app.errorhandler(500)
-def internal_error(error):
-    return jsonify({'error': 'Erro interno do servidor'}), 500
-
-@app.errorhandler(401)
-def unauthorized(error):
-    return jsonify({'error': 'Token não fornecido ou inválido'}), 401
+        return jsonify({'error': 'Arquivo não encontrado'}), 404
