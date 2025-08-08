@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Área do Aluno - CursoHub</title>
+  <link rel="stylesheet" href="../../styles/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-neutral-50 min-h-screen">
+  <!-- Sidebar Aluno -->
+  <aside class="fixed left-0 top-0 h-full w-64 gradient-primary text-white border border-white/20 shadow-xl transform -translate-x-full lg:translate-x-0 transition-transform duration-300 z-40" id="sidebar">
+    <div class="p-6">
+      <div class="flex items-center space-x-3 mb-8 logo">
+        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+          <i class="fas fa-graduation-cap text-white text-lg"></i>
+        </div>
+        <h1 class="text-xl font-bold">CursoHub</h1>
+      </div>
+      <nav class="space-y-2" id="aluno-nav">
+        <a href="./meus_cursos.html" class="flex items-center p-3 rounded-lg transition-colors active" aria-current="page">
+          <i class="fas fa-book w-5"></i>
+          <span class="ml-3">Meus Cursos</span>
+        </a>
+        <a href="./perfil.html" class="flex items-center p-3 rounded-lg transition-colors">
+          <i class="fas fa-user w-5"></i>
+          <span class="ml-3">Perfil</span>
+        </a>
+        <a href="../index.html" class="flex items-center p-3 rounded-lg transition-colors">
+          <i class="fas fa-sign-out-alt w-5"></i>
+          <span class="ml-3">Sair</span>
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <main class="lg:ml-64 min-h-screen">
+    <header class="topbar px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <button class="lg:hidden text-neutral-600" onclick="toggleSidebar()">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+          <h2 class="text-2xl font-bold text-neutral-800" id="page-title">Meus Cursos</h2>
+        </div>
+        <a href="../../index.html" class="btn btn-ghost text-sm"><i class="fas fa-home mr-2"></i>Página Inicial</a>
+      </div>
+    </header>
+    <iframe id="section-frame" class="w-full" style="border:0; min-height: calc(100vh - 72px);"></iframe>
+  </main>
+
+  <script>
+    function toggleSidebar(){
+      const s = document.getElementById('sidebar');
+      s.classList.toggle('-translate-x-full');
+    }
+    const frame = document.getElementById('section-frame');
+    function loadSection(path, title){
+      frame.src = path; document.getElementById('page-title').textContent = title || '';
+      document.querySelectorAll('#aluno-nav a').forEach(a=>a.classList.remove('active'));
+      const link = Array.from(document.querySelectorAll('#aluno-nav a')).find(a=>a.getAttribute('href')===path);
+      if(link) link.classList.add('active');
+    }
+    document.getElementById('aluno-nav').addEventListener('click',(e)=>{
+      const a = e.target.closest('a'); if(!a) return; e.preventDefault();
+      const href = a.getAttribute('href');
+      const map = { './meus_cursos.html':'Meus Cursos', './perfil.html':'Perfil' };
+      loadSection(href, map[href]);
+      history.replaceState({}, '', href);
+    });
+    loadSection('./meus_cursos.html', 'Meus Cursos');
+  </script>
+</body>
+</html>

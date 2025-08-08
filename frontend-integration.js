@@ -228,8 +228,12 @@ class CursoHubUI {
         const token = localStorage.getItem('cursohub_token');
         const currentPage = window.location.pathname;
         
-        // Páginas que requerem autenticação
-        const protectedPages = ['/telas/painel.html', '/telas/salinhadoaluno.html'];
+        // Páginas que requerem autenticação (novas rotas)
+        const protectedPages = [
+            '/telas/professor/painel.html',
+            '/telas/aluno/index.html',
+            '/telas/salinhadoaluno.html'
+        ];
         
         if (protectedPages.includes(currentPage) && !token) {
             window.location.href = '/telas/index.html';
@@ -289,12 +293,12 @@ class CursoHubUI {
             
             this.showSuccess('Login realizado com sucesso!');
             
-            // Redirecionar baseado no papel do usuário
+            // Redirecionar baseado no papel do usuário (novas rotas)
             const user = response.user;
             if (user.role === 'teacher' || user.role === 'admin') {
-                window.location.href = '/telas/painel.html';
+                window.location.href = '/telas/professor/painel.html';
             } else {
-                window.location.href = '/telas/salinhadoaluno.html';
+                window.location.href = '/telas/aluno/index.html';
             }
             
         } catch (error) {

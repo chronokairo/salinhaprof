@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel do Educador - CursoHub</title>
+    <link rel="stylesheet" href="../../styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+</head>
+<body class="bg-neutral-50 min-h-screen">
+    <!-- Sidebar -->
+    <aside class="fixed left-0 top-0 h-full w-64 gradient-primary text-white transform -translate-x-full lg:translate-x-0 transition-transform duration-300 z-40" id="sidebar">
+        <div class="p-6">
+            <!-- Logo -->
+            <div class="flex items-center space-x-3 mb-8 logo">
+                <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-white text-lg"></i>
+                </div>
+                <h1 class="text-xl font-bold">CursoHub</h1>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="space-y-2" id="prof-nav">
+                <a href="#dashboard" class="p-3 rounded-lg" aria-current="page">
+                    <i class="fas fa-chart-pie w-5"></i>
+                    <span class="ml-3">Dashboard</span>
+                </a>
+                <a href="#cursos" class="p-3 rounded-lg">
+                    <i class="fas fa-book w-5"></i>
+                    <span class="ml-3">Meus Cursos</span>
+                </a>
+                <a href="#alunos" class="p-3 rounded-lg">
+                    <i class="fas fa-users w-5"></i>
+                    <span class="ml-3">Alunos</span>
+                </a>
+                <a href="#analytics" class="p-3 rounded-lg">
+                    <i class="fas fa-chart-line w-5"></i>
+                    <span class="ml-3">Analytics</span>
+                </a>
+                <a href="#materiais" class="p-3 rounded-lg">
+                    <i class="fas fa-folder w-5"></i>
+                    <span class="ml-3">Materiais</span>
+                </a>
+            </nav>
+
+            <!-- User Info -->
+            <div class="absolute bottom-6 left-6 right-6">
+                <div class="flex items-center space-x-3 p-3 bg-white/10 rounded-lg">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face&auto=format" alt="Professor" class="w-10 h-10 rounded-full object-cover">
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium truncate">Prof. João Silva</p>
+                        <p class="text-sm text-blue-200">Matemática</p>
+                    </div>
+                    <a href="../index.html" class="text-blue-200 hover:text-white" title="Sair">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 min-h-screen">
+        <!-- Top Bar -->
+        <header class="topbar px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button class="lg:hidden text-neutral-600" onclick="toggleSidebar()">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <h2 class="text-2xl font-bold text-neutral-800" id="page-title">Dashboard</h2>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="../../index.html" class="btn btn-ghost text-sm">
+                        <i class="fas fa-home mr-2"></i>
+                        Página Inicial
+                    </a>
+                    <a href="./cursos_novo.html" class="btn btn-primary">
+                        <i class="fas fa-plus mr-2"></i>
+                        Novo Curso
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Conteúdo dinamicamente carregado -->
+        <iframe id="section-frame" class="w-full" style="border:0; min-height: calc(100vh - 72px);"></iframe>
+    </main>
+
+    <script>
+        // Toggle sidebar mobile
+        function toggleSidebar(){
+            const s = document.getElementById('sidebar');
+            if(s.classList.contains('-translate-x-full')) s.classList.remove('-translate-x-full');
+            else s.classList.add('-translate-x-full');
+        }
+        // Mapa de seções
+        const SECTION_MAP = {
+            dashboard: './dashboard.html',
+            cursos: './cursos.html',
+            alunos: './alunos.html',
+            analytics: './analytics.html',
+            materiais: './materiais.html'
+        };
+        const TITLES = {
+            dashboard: 'Dashboard',
+            cursos: 'Meus Cursos',
+            alunos: 'Alunos',
+            analytics: 'Analytics',
+            materiais: 'Materiais'
+        };
+        const frame = document.getElementById('section-frame');
+        function setActiveNav(key){
+            document.querySelectorAll('#prof-nav a').forEach(a => {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + key);
+            });
+        }
+        function loadSectionByKey(key){
+            const path = SECTION_MAP[key] || SECTION_MAP.dashboard;
+            frame.src = path;
+            document.getElementById('page-title').textContent = TITLES[key] || 'Dashboard';
+            setActiveNav(key);
+            // Atualiza hash sem sair da página
+            if(location.hash !== '#' + key) location.hash = '#' + key;
+        }
+        // Clique de navegação
+        document.getElementById('prof-nav').addEventListener('click', (e)=>{
+            const a = e.target.closest('a');
+            if(!a) return;
+            e.preventDefault();
+            const key = (a.getAttribute('href') || '#dashboard').replace('#','');
+            loadSectionByKey(key);
+        });
+        // Suporte ao back/forward do navegador
+        window.addEventListener('hashchange', ()=>{
+            const key = (location.hash || '#dashboard').replace('#','');
+            loadSectionByKey(key);
+        });
+        // Inicialização: usa o hash (#cursos, etc.) ou dashboard
+        const initialKey = (location.hash || '#dashboard').replace('#','');
+        loadSectionByKey(initialKey);
+    </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard • Professor</title>
+  <link rel="stylesheet" href="../../styles/style.css" />
+</head>
+<body class="bg-neutral-50">
+  <div class="p-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="card">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-neutral-600">Total de Cursos</p>
+            <p class="text-3xl font-bold text-gradient">8</p>
+          </div>
+          <div class="w-12 h-12 gradient-primary rounded-xl flex items-center justify-center">
+            <i class="fas fa-book text-white"></i>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center text-sm">
+          <span class="text-success mr-1">↗ +12%</span>
+          <span class="text-neutral-500">vs mês anterior</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-neutral-600">Alunos Ativos</p>
+            <p class="text-3xl font-bold text-gradient">247</p>
+          </div>
+          <div class="w-12 h-12 gradient-secondary rounded-xl flex items-center justify-center">
+            <i class="fas fa-users text-white"></i>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center text-sm">
+          <span class="text-success mr-1">↗ +8%</span>
+          <span class="text-neutral-500">vs mês anterior</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-neutral-600">Avaliações</p>
+            <p class="text-3xl font-bold text-gradient">4.7</p>
+          </div>
+          <div class="w-12 h-12 bg-gradient-to-br from-success to-green-600 rounded-xl flex items-center justify-center">
+            <i class="fas fa-star text-white"></i>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center text-sm">
+          <span class="text-success mr-1">↗ +0.2</span>
+          <span class="text-neutral-500">média</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-neutral-600">Receita</p>
+            <p class="text-3xl font-bold text-gradient">R$ 3.2k</p>
+          </div>
+          <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+            <i class="fas fa-coins text-white"></i>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center text-sm">
+          <span class="text-success mr-1">↗ +18%</span>
+          <span class="text-neutral-500">vs mês anterior</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6">
+      <div class="card">
+        <h3 class="font-semibold mb-4">Atividade recente</h3>
+        <ul class="space-y-3">
+          <li class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <span class="badge badge-success">Novo</span>
+              <span>Aluno matriculado em Matemática Básica</span>
+            </div>
+            <span class="text-sm text-neutral-500">há 2h</span>
+          </li>
+          <li class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <span class="badge badge-info">Aviso</span>
+              <span>Comentário na aula 3</span>
+            </div>
+            <span class="text-sm text-neutral-500">há 5h</span>
+          </li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="font-semibold mb-4">Cursos em destaque</h3>
+        <div class="cards-grid">
+          <div class="card">
+            <div class="aspect-video bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg mb-4"></div>
+            <h4 class="font-semibold mb-1">Matemática Básica</h4>
+            <p class="text-sm text-neutral-600 mb-3">Fundamentos da matemática para ensino médio</p>
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-primary-600 font-medium">89 alunos</span>
+              <a href="./cursos.html" class="btn btn-sm btn-ghost">Ver</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="aspect-video bg-gradient-to-br from-secondary-400 to-secondary-600 rounded-lg mb-4"></div>
+            <h4 class="font-semibold mb-1">Física Aplicada</h4>
+            <p class="text-sm text-neutral-600 mb-3">Conceitos fundamentais de física</p>
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-primary-600 font-medium">67 alunos</span>
+              <a href="./cursos.html" class="btn btn-sm btn-ghost">Ver</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" defer></script>
+</body>
+</html>
