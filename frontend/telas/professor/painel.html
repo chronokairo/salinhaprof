@@ -55,7 +55,7 @@
                         <p class="font-medium truncate">Prof. João Silva</p>
                         <p class="text-sm text-blue-200">Matemática</p>
                     </div>
-                    <a href="../index.html" class="text-blue-200 hover:text-white" title="Sair" onclick="logout()">
+                    <a href="../index.html" class="text-blue-200 hover:text-white" title="Sair">
                         <i class="fas fa-sign-out-alt"></i>
                     </a>
                 </div>
@@ -92,19 +92,13 @@
     </main>
 
     <script>
-        // Função de logout
-        function logout() {
-            localStorage.removeItem('cursohub_token');
-            window.location.href = '../index.html';
-        }
-        
         // Toggle sidebar mobile
         function toggleSidebar(){
             const s = document.getElementById('sidebar');
             if(s.classList.contains('-translate-x-full')) s.classList.remove('-translate-x-full');
             else s.classList.add('-translate-x-full');
         }
-        
+
         // Mapa de seções
         const SECTION_MAP = {
             dashboard: './dashboard.html',
@@ -142,14 +136,9 @@
             const key = (a.getAttribute('href') || '#dashboard').replace('#','');
             loadSectionByKey(key);
         });
-        
+
         // Inicialização: carrega dashboard por padrão (sem auto redirect)
         loadSectionByKey('dashboard');
-    </script>
-</body>
-</html>
-        const initialKey = (location.hash || '#dashboard').replace('#','');
-        loadSectionByKey(initialKey);
     </script>
 </body>
 </html>

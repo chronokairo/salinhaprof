@@ -178,39 +178,58 @@
             try {
                 console.log('Tentando fazer login com:', email);
                 
-                // Fazer requisição para a API
-                const apiUrl = 'http://localhost:5000/api/auth/login';
-                console.log('Enviando requisição para:', apiUrl);
+                // Simulação de autenticação fictícia
+                await new Promise(resolve => setTimeout(resolve, 1500)); // Simula delay da API
                 
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
+                // Usuários fictícios para demonstração
+                const users = {
+                    'professor@cursohub.com': {
+                        password: '123456',
+                        role: 'teacher',
+                        name: 'Prof. João Silva',
+                        id: 1
                     },
-                    body: JSON.stringify({ email, password })
-                });
+                    'aluno@cursohub.com': {
+                        password: '123456',
+                        role: 'student',
+                        name: 'Maria Santos',
+                        id: 2
+                    },
+                    'admin@cursohub.com': {
+                        password: '123456',
+                        role: 'admin',
+                        name: 'Admin Sistema',
+                        id: 3
+                    }
+                };
                 
-                console.log('Resposta recebida:', response.status);
+                const user = users[email];
                 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Erro na autenticação');
+                if (!user || user.password !== password) {
+                    throw new Error('Email ou senha incorretos');
                 }
                 
-                const data = await response.json();
-                console.log('Login bem-sucedido:', data);
+                // Gerar token fictício
+                const token = btoa(JSON.stringify({
+                    userId: user.id,
+                    email: email,
+                    role: user.role,
+                    name: user.name,
+                    exp: Date.now() + (24 * 60 * 60 * 1000) // 24 horas
+                }));
                 
-                // Salvar token
-                if (data.token) {
-                    localStorage.setItem('cursohub_token', data.token);
-                    console.log('Token salvo no localStorage');
-                }
+                console.log('Login bem-sucedido para:', user.name);
+                
+                // Salvar dados do usuário no localStorage
+                localStorage.setItem('cursohub_token', token);
+                localStorage.setItem('cursohub_user', JSON.stringify(user));
+                console.log('Token e dados do usuário salvos no localStorage');
                 
                 // Mostrar sucesso
                 submitButton.innerHTML = '<i class="fas fa-check mr-2"></i>Sucesso!';
+                
                 setTimeout(() => {
                     // Redirecionar baseado no papel do usuário
-                    const user = data.user;
                     if (user.role === 'teacher' || user.role === 'admin') {
                         console.log('Redirecionando para painel do professor');
                         window.location.href = 'professor/painel.html';
